@@ -1,0 +1,1001 @@
+openapi: 3.0.3
+info:
+  title: User Microservice API
+  description: Microservicio para gestión de usuarios y roles
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8084/api/v1
+    description: User Microservice
+
+paths:
+  # ==================== ROLES ====================
+  /roles:
+    get:
+      tags:
+        - Role
+      summary: Obtener todos los roles
+      operationId: getRoles
+      responses:
+        '200':
+          description: Roles obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleResponseDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+    post:
+      tags:
+        - Role
+      summary: Crear un nuevo role
+      operationId: createRole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleRequestDTO'
+      responses:
+        '201':
+          description: Role creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponseDTO'
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /roles/{id}:
+    get:
+      tags:
+        - Role
+      summary: Obtener role por ID
+      operationId: getRoleById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Role obtenido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponseDTO'
+        '404':
+          description: Role no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+    put:
+      tags:
+        - Role
+      summary: Actualizar role
+      operationId: updateRole
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleRequestDTO'
+      responses:
+        '200':
+          description: Role actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponseDTO'
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Role no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+    delete:
+      tags:
+        - Role
+      summary: Eliminar role
+      operationId: deleteRole
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Role eliminado
+        '404':
+          description: Role no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /roles/name/{name}:
+    get:
+      tags:
+        - Role
+      summary: Obtener role por nombre
+      operationId: getRoleByName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Role obtenido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponseDTO'
+        '404':
+          description: Role no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /roles/search/{name}:
+    get:
+      tags:
+        - Role
+      summary: Buscar roles por nombre
+      operationId: searchRoles
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Roles encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleResponseDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  # ==================== USERS ====================
+  /users:
+    get:
+      tags:
+        - User
+      summary: Obtener todos los usuarios con paginación
+      operationId: getUsers
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Usuarios obtenidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPageResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+    post:
+      tags:
+        - User
+      summary: Crear un nuevo usuario
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestDTO'
+      responses:
+        '201':
+          description: Usuario creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDTO'
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /users/role/{roleId}:
+    get:
+      tags:
+        - User
+      summary: Obtener usuarios por role con paginación
+      operationId: getUsersByRole
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Usuarios obtenidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPageResponse'
+        '404':
+          description: Role no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /users/search/{text}:
+    get:
+      tags:
+        - User
+      summary: Buscar usuarios por nombre o apellido
+      operationId: searchUsers
+      parameters:
+        - name: text
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Usuarios encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPageResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /users/{id}:
+    get:
+      tags:
+        - User
+      summary: Obtener usuario por ID
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Usuario obtenido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDTO'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+    put:
+      tags:
+        - User
+      summary: Actualizar usuario
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestDTO'
+      responses:
+        '200':
+          description: Usuario actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDTO'
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+    delete:
+      tags:
+        - User
+      summary: Eliminar usuario (soft delete)
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Usuario eliminado
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /users/email/{email}:
+    get:
+      tags:
+        - User
+      summary: Obtener usuario por email
+      operationId: getUserByEmail
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuario obtenido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDTO'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /users/carers:
+    get:
+      tags:
+        - User
+      summary: Obtener todos los cuidadores
+      operationId: getCarers
+      responses:
+        '200':
+          description: Cuidadores obtenidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponseDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /users/carers/paged:
+    get:
+      tags:
+        - User
+      summary: Obtener cuidadores con paginación
+      operationId: getCarersPaged
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Cuidadores obtenidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPageResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /users/owners:
+    get:
+      tags:
+        - User
+      summary: Obtener todos los dueños
+      operationId: getOwners
+      responses:
+        '200':
+          description: Dueños obtenidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponseDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /users/owners/paged:
+    get:
+      tags:
+        - User
+      summary: Obtener dueños con paginación
+      operationId: getOwnersPaged
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Dueños obtenidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPageResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /users/count:
+    get:
+      tags:
+        - User
+      summary: Contar todos los usuarios activos
+      operationId: countUsers
+      responses:
+        '200':
+          description: Conteo de usuarios
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /users/count/role/{roleId}:
+    get:
+      tags:
+        - User
+      summary: Contar usuarios por role
+      operationId: countUsersByRole
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Conteo de usuarios
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+        '404':
+          description: Role no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  # ==================== USER ROLES ====================
+  /user-roles:
+    get:
+      tags:
+        - UserRole
+      summary: Obtener todas las relaciones usuario-rol
+      operationId: getAllUserRoles
+      responses:
+        '200':
+          description: Relaciones obtenidas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRoleResponseDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+    post:
+      tags:
+        - UserRole
+      summary: Asignar un rol a un usuario
+      operationId: assignRoleToUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRoleRequestDTO'
+      responses:
+        '201':
+          description: Rol asignado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoleResponseDTO'
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /user-roles/{id}:
+    get:
+      tags:
+        - UserRole
+      summary: Obtener relación usuario-rol por ID
+      operationId: getUserRoleById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Relación encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoleResponseDTO'
+        '404':
+          description: Relación no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+    delete:
+      tags:
+        - UserRole
+      summary: Eliminar relación usuario-rol
+      operationId: deleteUserRole
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Relación eliminada exitosamente
+        '404':
+          description: Relación no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /user-roles/user/{userId}:
+    get:
+      tags:
+        - UserRole
+      summary: Obtener todos los roles asignados a un usuario
+      operationId: getRolesByUserId
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Roles del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRoleResponseDTO'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /user-roles/role/{roleId}:
+    get:
+      tags:
+        - UserRole
+      summary: Obtener todos los usuarios asignados a un rol
+      operationId: getUsersByRoleId
+      parameters:
+        - name: roleId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Usuarios con el rol especificado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRoleResponseDTO'
+        '404':
+          description: Rol no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+components:
+  schemas:
+    # Error Schema
+    ApiError:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+
+    # DTOs de Role
+    RoleRequestDTO:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          maxLength: 10
+
+    RoleResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+
+    # DTOs de User
+    UserRequestDTO:
+      type: object
+      required:
+        - name
+        - lastName
+        - email
+        - password
+        - phoneNumber
+        - roleId
+      properties:
+        name:
+          type: string
+          maxLength: 60
+        lastName:
+          type: string
+          maxLength: 60
+        email:
+          type: string
+          format: email
+          maxLength: 100
+        password:
+          type: string
+          writeOnly: true
+        phoneNumber:
+          type: string
+          pattern: '^[0-9]{10,15}$'
+        profilePhoto:
+          type: string
+        roleId:
+          type: integer
+          format: int64
+        availabilityState:
+          type: string
+          enum: [AVAILABLE, NOT_AVAILABLE, BUSY]
+
+    UserResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        profilePhoto:
+          type: string
+        roleId:
+          type: integer
+          format: int64
+        availabilityState:
+          type: string
+          enum: [AVAILABLE, NOT_AVAILABLE, BUSY]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        active:
+          type: boolean
+
+    UserPageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponseDTO'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        size:
+          type: integer
+        number:
+          type: integer
+
+    # ==================== USER ROLE ====================
+    UserRoleRequestDTO:
+      type: object
+      required:
+        - userId
+        - roleId
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: ID del usuario asociado al rol.
+        roleId:
+          type: integer
+          format: int64
+          description: ID del rol asignado al usuario.
+
+    UserRoleResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID del registro de relación usuario-rol.
+        userId:
+          type: integer
+          format: int64
+          description: ID del usuario asociado.
+        roleId:
+          type: integer
+          format: int64
+          description: ID del rol asociado.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        active:
+          type: boolean

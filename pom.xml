@@ -15,7 +15,7 @@
     <artifactId>user-microservice</artifactId>
     <version>1.0.0</version>
     <name>user-microservice</name>
-    <description>Microservice for managing users, owners, carers and roles</description>
+    <description>Microservice for managing users and roles</description>
 
     <properties>
         <java.version>21</java.version>
@@ -117,7 +117,7 @@
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>CuidadoDeMascota</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
             <scope>compile</scope>
             <classifier>entities</classifier>
         </dependency>
@@ -125,7 +125,7 @@
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>CuidadoDeMascota</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
             <scope>compile</scope>
             <classifier>dtos</classifier>
         </dependency>
