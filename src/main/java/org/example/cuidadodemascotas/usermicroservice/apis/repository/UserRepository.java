@@ -23,27 +23,29 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.active = true")
     List<User> findAllActive();
 
-    /**
-     * Obtener usuarios por role
-     */
-    /*
-    @Query("SELECT u FROM User u WHERE u.role.id = :roleId AND u.active = true ORDER BY u.id DESC")
+    @Query("SELECT DISTINCT u FROM User u " +
+            "JOIN u.userRoles ur " +
+            "WHERE ur.role.id = :roleId AND u.active = true AND ur.active = true " +
+            "ORDER BY u.id DESC")
     Page<User> findByRoleIdAndActiveTrue(@Param("roleId") Long roleId, Pageable pageable);
 
-    @Query("SELECT u FROM User u WHERE u.role.id = :roleId AND u.active = true")
+    @Query("SELECT DISTINCT u FROM User u " +
+            "JOIN u.userRoles ur " +
+            "WHERE ur.role.id = :roleId AND u.active = true AND ur.active = true")
     List<User> findByRoleIdAndActiveTrue(@Param("roleId") Long roleId);
-     */
 
-    /**
-     * Obtener usuarios por nombre de role
-     */
-    /*
-    @Query("SELECT u FROM User u WHERE u.role.name = :roleName AND u.active = true ORDER BY u.id DESC")
+    @Query("SELECT DISTINCT u FROM User u " +
+            "JOIN u.userRoles ur " +
+            "JOIN ur.role r " +
+            "WHERE r.name = :roleName AND u.active = true AND ur.active = true " +
+            "ORDER BY u.id DESC")
     Page<User> findByRoleNameAndActiveTrue(@Param("roleName") String roleName, Pageable pageable);
 
-    @Query("SELECT u FROM User u WHERE u.role.name = :roleName AND u.active = true")
+    @Query("SELECT DISTINCT u FROM User u " +
+            "JOIN u.userRoles ur " +
+            "JOIN ur.role r " +
+            "WHERE r.name = :roleName AND u.active = true AND ur.active = true")
     List<User> findByRoleNameAndActiveTrue(@Param("roleName") String roleName);
-    */
 
     /**
      * Buscar usuario por email
@@ -62,25 +64,46 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Buscar usuarios por nombre o apellido
      */
     @Query("SELECT u FROM User u WHERE " +
-            "(LOWER(u.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-            "LOWER(u.lastName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) AND " +
+            "(LOWER(CAST(u.name AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            "LOWER(CAST(u.lastName AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) AND " +
             "u.active = true " +
             "ORDER BY u.id DESC")
     Page<User> searchByNameOrLastName(@Param("searchTerm") String searchTerm, Pageable pageable);
 
     /**
-     * Búsqueda con filtros múltiples
+     * Búsqueda con filtros múltiples (incluyendo roles)
      */
-    @Query("SELECT u FROM User u WHERE " +
-            //"(:roleId IS NULL OR u.role.id = :roleId) AND " +
+    @Query("SELECT DISTINCT u FROM User u " +
+            "LEFT JOIN u.userRoles ur " +
+            "WHERE (:roleId IS NULL OR ur.role.id = :roleId) AND " +
             "(:searchTerm IS NULL OR " +
-            "(u.name) LIKE (CONCAT('%', :searchTerm, '%')) OR " +
-            "(u.lastName) LIKE (CONCAT('%', :searchTerm, '%')) OR " +
-            "(u.email) LIKE (CONCAT('%', :searchTerm, '%'))) AND " +
-            "u.active = true " +
+            " LOWER(CAST(u.name AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            " LOWER(CAST(u.lastName AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            " LOWER(CAST(u.email AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) AND " +
+            "u.active = true AND " +
+            "(ur IS NULL OR ur.active = true) " +
             "ORDER BY u.id DESC")
     Page<User> findByFilters(
-            //@Param("roleId") Long roleId,
+            @Param("roleId") Long roleId,
+            @Param("searchTerm") String searchTerm,
+            Pageable pageable
+    );
+
+    /**
+     * Búsqueda con nombre de rol en lugar de ID
+     */
+    @Query("SELECT DISTINCT u FROM User u " +
+            "JOIN u.userRoles ur " +
+            "JOIN ur.role r " +
+            "WHERE (:roleName IS NULL OR r.name = :roleName) AND " +
+            "(:searchTerm IS NULL OR " +
+            " LOWER(CAST(u.name AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            " LOWER(CAST(u.lastName AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            " LOWER(CAST(u.email AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) AND " +
+            "u.active = true AND ur.active = true " +
+            "ORDER BY u.id DESC")
+    Page<User> findByRoleNameAndSearch(
+            @Param("roleName") String roleName,
             @Param("searchTerm") String searchTerm,
             Pageable pageable
     );
@@ -88,11 +111,32 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /**
      * Contar usuarios activos por role
      */
-    /*
-    @Query("SELECT COUNT(u) FROM User u WHERE u.role.id = :roleId AND u.active = true")
+    @Query("SELECT COUNT(DISTINCT u) FROM User u " +
+            "JOIN u.userRoles ur " +
+            "WHERE ur.role.id = :roleId AND u.active = true AND ur.active = true")
     long countByRoleId(@Param("roleId") Long roleId);
+
+    /**
+     * Contar usuarios por nombre de rol
+     */
+    @Query("SELECT COUNT(DISTINCT u) FROM User u " +
+            "JOIN u.userRoles ur " +
+            "JOIN ur.role r " +
+            "WHERE r.name = :roleName AND u.active = true AND ur.active = true")
+    long countByRoleName(@Param("roleName") String roleName);
 
     @Query("SELECT COUNT(u) FROM User u WHERE u.active = true")
     long countByActiveTrue();
+
+    /**
+     * Buscar usuarios con un estado de disponibilidad específico
      */
+    @Query("SELECT u FROM User u " +
+            "JOIN u.userRoles ur " +
+            "JOIN ur.role r " +
+            "WHERE r.name = :roleName AND u.state = :availabilityState AND u.active = true AND ur.active = true")
+    List<User> findByRoleNameAndAvailabilityState(
+            @Param("roleName") String roleName,
+            @Param("availabilityState") String availabilityState
+    );
 }

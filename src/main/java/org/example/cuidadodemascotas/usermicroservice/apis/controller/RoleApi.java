@@ -34,25 +34,25 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T19:08:53.202801300-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-28T00:04:19.711678100-03:00[America/Asuncion]")
 @Validated
 @Tag(name = "Role", description = "the Role API")
 public interface RoleApi {
 
     /**
-     * POST /roles : Crear un nuevo role
+     * POST /roles : Crear un nuevo rol
      *
      * @param roleRequestDTO  (required)
-     * @return Role creado exitosamente (status code 201)
+     * @return Rol creado exitosamente (status code 201)
      *         or Solicitud inválida (status code 400)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
         operationId = "createRole",
-        summary = "Crear un nuevo role",
+        summary = "Crear un nuevo rol",
         tags = { "Role" },
         responses = {
-            @ApiResponse(responseCode = "201", description = "Role creado exitosamente", content = {
+            @ApiResponse(responseCode = "201", description = "Rol creado exitosamente", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = RoleResponseDTO.class))
             }),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = {
@@ -76,20 +76,20 @@ public interface RoleApi {
 
 
     /**
-     * DELETE /roles/{id} : Eliminar role
+     * DELETE /roles/{id} : Eliminar rol
      *
-     * @param id  (required)
-     * @return Role eliminado (status code 204)
-     *         or Role no encontrado (status code 404)
+     * @param id ID del recurso (required)
+     * @return Rol eliminado (status code 204)
+     *         or Recurso no encontrado (status code 404)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
         operationId = "deleteRole",
-        summary = "Eliminar role",
+        summary = "Eliminar rol",
         tags = { "Role" },
         responses = {
-            @ApiResponse(responseCode = "204", description = "Role eliminado"),
-            @ApiResponse(responseCode = "404", description = "Role no encontrado", content = {
+            @ApiResponse(responseCode = "204", description = "Rol eliminado"),
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
@@ -104,27 +104,27 @@ public interface RoleApi {
     )
     
     ResponseEntity<Void> deleteRole(
-        @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+        @Parameter(name = "id", description = "ID del recurso", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
     );
 
 
     /**
-     * GET /roles/{id} : Obtener role por ID
+     * GET /roles/{id} : Obtener rol por ID
      *
-     * @param id  (required)
-     * @return Role obtenido (status code 200)
-     *         or Role no encontrado (status code 404)
+     * @param id ID del recurso (required)
+     * @return Rol obtenido (status code 200)
+     *         or Recurso no encontrado (status code 404)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
         operationId = "getRoleById",
-        summary = "Obtener role por ID",
+        summary = "Obtener rol por ID",
         tags = { "Role" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Role obtenido", content = {
+            @ApiResponse(responseCode = "200", description = "Rol obtenido", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = RoleResponseDTO.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Role no encontrado", content = {
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
@@ -139,42 +139,7 @@ public interface RoleApi {
     )
     
     ResponseEntity<RoleResponseDTO> getRoleById(
-        @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
-    );
-
-
-    /**
-     * GET /roles/name/{name} : Obtener role por nombre
-     *
-     * @param name  (required)
-     * @return Role obtenido (status code 200)
-     *         or Role no encontrado (status code 404)
-     *         or Error interno del servidor (status code 500)
-     */
-    @Operation(
-        operationId = "getRoleByName",
-        summary = "Obtener role por nombre",
-        tags = { "Role" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Role obtenido", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = RoleResponseDTO.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "Role no encontrado", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/roles/name/{name}",
-        produces = { "application/json" }
-    )
-    
-    ResponseEntity<RoleResponseDTO> getRoleByName(
-        @Parameter(name = "name", description = "", required = true, in = ParameterIn.PATH) @PathVariable("name") String name
+        @Parameter(name = "id", description = "ID del recurso", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
     );
 
 
@@ -240,27 +205,27 @@ public interface RoleApi {
 
 
     /**
-     * PUT /roles/{id} : Actualizar role
+     * PUT /roles/{id} : Actualizar rol
      *
-     * @param id  (required)
+     * @param id ID del recurso (required)
      * @param roleRequestDTO  (required)
-     * @return Role actualizado (status code 200)
+     * @return Rol actualizado (status code 200)
      *         or Solicitud inválida (status code 400)
-     *         or Role no encontrado (status code 404)
+     *         or Recurso no encontrado (status code 404)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
         operationId = "updateRole",
-        summary = "Actualizar role",
+        summary = "Actualizar rol",
         tags = { "Role" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Role actualizado", content = {
+            @ApiResponse(responseCode = "200", description = "Rol actualizado", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = RoleResponseDTO.class))
             }),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Role no encontrado", content = {
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
@@ -276,7 +241,7 @@ public interface RoleApi {
     )
     
     ResponseEntity<RoleResponseDTO> updateRole(
-        @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
+        @Parameter(name = "id", description = "ID del recurso", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
         @Parameter(name = "RoleRequestDTO", description = "", required = true) @Valid @RequestBody RoleRequestDTO roleRequestDTO
     );
 

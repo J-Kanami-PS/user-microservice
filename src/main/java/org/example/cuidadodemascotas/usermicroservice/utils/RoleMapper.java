@@ -12,11 +12,9 @@ public class RoleMapper {
         if (entity == null) {
             return null;
         }
-
         RoleResponseDTO dto = new RoleResponseDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-
         return dto;
     }
 
@@ -24,10 +22,8 @@ public class RoleMapper {
         if (dto == null) {
             return null;
         }
-
         Role entity = new Role();
         entity.setName(dto.getName());
-
         return entity;
     }
 
@@ -35,7 +31,6 @@ public class RoleMapper {
         if (dto == null || entity == null) {
             return;
         }
-
         if (dto.getName() != null) {
             entity.setName(dto.getName());
         }

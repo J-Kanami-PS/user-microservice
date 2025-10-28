@@ -28,15 +28,12 @@ public class RoleService {
     @Transactional
     public RoleResponseDTO create(RoleRequestDTO dto) {
         log.info("Creating role: {}", dto.getName());
-
         if (roleRepository.existsByName(dto.getName())) {
             throw new IllegalArgumentException(
                     "Ya existe un role con el nombre: " + dto.getName());
         }
-
         Role entity = roleMapper.toEntity(dto);
         Role saved = roleRepository.save(entity);
-
         log.info("Role created successfully with id: {}", saved.getId());
         return roleMapper.toDto(saved);
     }
@@ -75,18 +72,14 @@ public class RoleService {
     @Transactional
     public RoleResponseDTO update(Long id, RoleRequestDTO dto) {
         log.info("Updating role with id: {}", id);
-
         Role existing = roleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(id, Role.class));
-
         if (roleRepository.existsByNameAndIdNot(dto.getName(), id)) {
             throw new IllegalArgumentException(
                     "Ya existe otro role con el nombre: " + dto.getName());
         }
-
         roleMapper.updateEntityFromDto(dto, existing);
         Role updated = roleRepository.save(existing);
-
         log.info("Role updated successfully: {}", id);
         return roleMapper.toDto(updated);
     }
@@ -94,10 +87,8 @@ public class RoleService {
     @Transactional
     public void delete(Long id) {
         log.info("Deleting role with id: {}", id);
-
         Role entity = roleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(id, Role.class));
-
         roleRepository.delete(entity);
         log.info("Role deleted successfully: {}", id);
     }

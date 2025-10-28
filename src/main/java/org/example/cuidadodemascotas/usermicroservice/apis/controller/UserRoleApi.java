@@ -6,7 +6,6 @@
 package org.example.cuidadodemascotas.usermicroservice.apis.controller;
 
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.ApiError;
-import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserRoleRequestDTO;
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserRoleResponseDTO;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,61 +33,25 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T19:08:53.202801300-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-28T00:04:19.711678100-03:00[America/Asuncion]")
 @Validated
 @Tag(name = "UserRole", description = "the UserRole API")
 public interface UserRoleApi {
 
     /**
-     * POST /user-roles : Asignar un rol a un usuario
+     * DELETE /user-roles/{id} : Eliminar relación usuario-rol por ID
      *
-     * @param userRoleRequestDTO  (required)
-     * @return Rol asignado exitosamente (status code 201)
-     *         or Solicitud inválida (status code 400)
-     *         or Error interno del servidor (status code 500)
-     */
-    @Operation(
-        operationId = "assignRoleToUser",
-        summary = "Asignar un rol a un usuario",
-        tags = { "UserRole" },
-        responses = {
-            @ApiResponse(responseCode = "201", description = "Rol asignado exitosamente", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = UserRoleResponseDTO.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.POST,
-        value = "/user-roles",
-        produces = { "application/json" },
-        consumes = { "application/json" }
-    )
-    
-    ResponseEntity<UserRoleResponseDTO> assignRoleToUser(
-        @Parameter(name = "UserRoleRequestDTO", description = "", required = true) @Valid @RequestBody UserRoleRequestDTO userRoleRequestDTO
-    );
-
-
-    /**
-     * DELETE /user-roles/{id} : Eliminar relación usuario-rol
-     *
-     * @param id  (required)
+     * @param id ID del recurso (required)
      * @return Relación eliminada exitosamente (status code 204)
-     *         or Relación no encontrada (status code 404)
+     *         or Recurso no encontrado (status code 404)
      */
     @Operation(
         operationId = "deleteUserRole",
-        summary = "Eliminar relación usuario-rol",
+        summary = "Eliminar relación usuario-rol por ID",
         tags = { "UserRole" },
         responses = {
             @ApiResponse(responseCode = "204", description = "Relación eliminada exitosamente"),
-            @ApiResponse(responseCode = "404", description = "Relación no encontrada", content = {
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             })
         }
@@ -100,7 +63,7 @@ public interface UserRoleApi {
     )
     
     ResponseEntity<Void> deleteUserRole(
-        @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+        @Parameter(name = "id", description = "ID del recurso", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
     );
 
 
@@ -131,99 +94,6 @@ public interface UserRoleApi {
     
     ResponseEntity<List<UserRoleResponseDTO>> getAllUserRoles(
         
-    );
-
-
-    /**
-     * GET /user-roles/user/{userId} : Obtener todos los roles asignados a un usuario
-     *
-     * @param userId  (required)
-     * @return Roles del usuario (status code 200)
-     *         or Usuario no encontrado (status code 404)
-     */
-    @Operation(
-        operationId = "getRolesByUserId",
-        summary = "Obtener todos los roles asignados a un usuario",
-        tags = { "UserRole" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Roles del usuario", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserRoleResponseDTO.class)))
-            }),
-            @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/user-roles/user/{userId}",
-        produces = { "application/json" }
-    )
-    
-    ResponseEntity<List<UserRoleResponseDTO>> getRolesByUserId(
-        @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId
-    );
-
-
-    /**
-     * GET /user-roles/{id} : Obtener relación usuario-rol por ID
-     *
-     * @param id  (required)
-     * @return Relación encontrada (status code 200)
-     *         or Relación no encontrada (status code 404)
-     */
-    @Operation(
-        operationId = "getUserRoleById",
-        summary = "Obtener relación usuario-rol por ID",
-        tags = { "UserRole" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Relación encontrada", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = UserRoleResponseDTO.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "Relación no encontrada", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/user-roles/{id}",
-        produces = { "application/json" }
-    )
-    
-    ResponseEntity<UserRoleResponseDTO> getUserRoleById(
-        @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
-    );
-
-
-    /**
-     * GET /user-roles/role/{roleId} : Obtener todos los usuarios asignados a un rol
-     *
-     * @param roleId  (required)
-     * @return Usuarios con el rol especificado (status code 200)
-     *         or Rol no encontrado (status code 404)
-     */
-    @Operation(
-        operationId = "getUsersByRoleId",
-        summary = "Obtener todos los usuarios asignados a un rol",
-        tags = { "UserRole" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Usuarios con el rol especificado", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserRoleResponseDTO.class)))
-            }),
-            @ApiResponse(responseCode = "404", description = "Rol no encontrado", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/user-roles/role/{roleId}",
-        produces = { "application/json" }
-    )
-    
-    ResponseEntity<List<UserRoleResponseDTO>> getUsersByRoleId(
-        @Parameter(name = "roleId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("roleId") Long roleId
     );
 
 }

@@ -15,43 +15,43 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * RoleRequestDTO
+ * AssignRoleRequestDTO
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-28T00:04:19.711678100-03:00[America/Asuncion]")
-public class RoleRequestDTO {
+public class AssignRoleRequestDTO {
 
-  private String name;
+  private Long roleId;
 
-  public RoleRequestDTO() {
+  public AssignRoleRequestDTO() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public RoleRequestDTO(String name) {
-    this.name = name;
+  public AssignRoleRequestDTO(Long roleId) {
+    this.roleId = roleId;
   }
 
-  public RoleRequestDTO name(String name) {
-    this.name = name;
+  public AssignRoleRequestDTO roleId(Long roleId) {
+    this.roleId = roleId;
     return this;
   }
 
   /**
-   * Get name
-   * @return name
+   * ID del rol a asignar
+   * @return roleId
   */
-  @NotNull @Size(max = 10) 
-  @Schema(name = "name", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("name")
-  public String getName() {
-    return name;
+  @NotNull 
+  @Schema(name = "roleId", description = "ID del rol a asignar", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("roleId")
+  public Long getRoleId() {
+    return roleId;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setRoleId(Long roleId) {
+    this.roleId = roleId;
   }
 
   @Override
@@ -62,20 +62,20 @@ public class RoleRequestDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RoleRequestDTO roleRequestDTO = (RoleRequestDTO) o;
-    return Objects.equals(this.name, roleRequestDTO.name);
+    AssignRoleRequestDTO assignRoleRequestDTO = (AssignRoleRequestDTO) o;
+    return Objects.equals(this.roleId, assignRoleRequestDTO.roleId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name);
+    return Objects.hash(roleId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class RoleRequestDTO {\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("class AssignRoleRequestDTO {\n");
+    sb.append("    roleId: ").append(toIndentedString(roleId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

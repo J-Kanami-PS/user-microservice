@@ -19,7 +19,7 @@ import jakarta.annotation.Generated;
  * UserRequestDTO
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T19:08:53.202801300-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-28T00:04:19.711678100-03:00[America/Asuncion]")
 public class UserRequestDTO {
 
   private String name;
@@ -71,7 +71,7 @@ public class UserRequestDTO {
     }
   }
 
-  private AvailabilityStateEnum availabilityState;
+  private AvailabilityStateEnum availabilityState = AvailabilityStateEnum.AVAILABLE;
 
   public UserRequestDTO() {
     super();
@@ -80,12 +80,13 @@ public class UserRequestDTO {
   /**
    * Constructor with only required parameters
    */
-  public UserRequestDTO(String name, String lastName, String email, String password, String phoneNumber) {
+  public UserRequestDTO(String name, String lastName, String email, String password, String phoneNumber, AvailabilityStateEnum availabilityState) {
     this.name = name;
     this.lastName = lastName;
     this.email = email;
     this.password = password;
     this.phoneNumber = phoneNumber;
+    this.availabilityState = availabilityState;
   }
 
   public UserRequestDTO name(String name) {
@@ -217,8 +218,8 @@ public class UserRequestDTO {
    * Get availabilityState
    * @return availabilityState
   */
-  
-  @Schema(name = "availabilityState", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "availabilityState", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("availabilityState")
   public AvailabilityStateEnum getAvailabilityState() {
     return availabilityState;

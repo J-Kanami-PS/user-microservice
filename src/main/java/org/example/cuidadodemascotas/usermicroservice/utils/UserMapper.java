@@ -1,23 +1,30 @@
 package org.example.cuidadodemascotas.usermicroservice.utils;
 
 import org.example.cuidadodemascota.commons.entities.user.User;
-import org.example.cuidadodemascota.commons.entities.user.Role;
 import org.example.cuidadodemascota.commons.entities.enums.AvailabilityStateEnum;
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserRequestDTO;
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserResponseDTO;
+import org.example.cuidadodemascotas.usermicroservice.apis.dto.RoleResponseDTO;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
+
+    private final RoleMapper roleMapper;
+
+    public UserMapper(RoleMapper roleMapper) {
+        this.roleMapper = roleMapper;
+    }
 
     public UserResponseDTO toDto(User entity) {
         if (entity == null) {
             return null;
         }
-
         UserResponseDTO dto = new UserResponseDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
@@ -25,17 +32,21 @@ public class UserMapper {
         dto.setEmail(entity.getEmail());
         dto.setPhoneNumber(entity.getPhoneNumber());
         dto.setProfilePhoto(entity.getProfilePhoto());
-
+        if (entity.getUserRoles() != null && !entity.getUserRoles().isEmpty()) {
+            List<RoleResponseDTO> roles = entity.getUserRoles().stream()
+                    .filter(userRole -> userRole.getActive() && userRole.getRole() != null)
+                    .map(userRole -> roleMapper.toDto(userRole.getRole()))
+                    .collect(Collectors.toList());
+            dto.setRoles(roles);
+        }
         if (entity.getState() != null) {
             dto.setAvailabilityState(
                     UserResponseDTO.AvailabilityStateEnum.valueOf(entity.getState().name())
             );
         }
-
         dto.setCreatedAt(toOffsetDateTime(entity.getCreatedAt()));
         dto.setUpdatedAt(toOffsetDateTime(entity.getUpdatedAt()));
         dto.setActive(entity.getActive());
-
         return dto;
     }
 
@@ -43,7 +54,6 @@ public class UserMapper {
         if (dto == null) {
             return null;
         }
-
         User entity = new User();
         entity.setName(dto.getName());
         entity.setLastName(dto.getLastName());
@@ -51,13 +61,11 @@ public class UserMapper {
         entity.setPassword(dto.getPassword());
         entity.setPhoneNumber(dto.getPhoneNumber());
         entity.setProfilePhoto(dto.getProfilePhoto());
-
         if (dto.getAvailabilityState() != null) {
             entity.setState(AvailabilityStateEnum.valueOf(dto.getAvailabilityState().name()));
         } else {
             entity.setState(AvailabilityStateEnum.AVAILABLE);
         }
-
         return entity;
     }
 
@@ -65,32 +73,24 @@ public class UserMapper {
         if (dto == null || entity == null) {
             return;
         }
-
         if (dto.getName() != null) {
             entity.setName(dto.getName());
         }
-
         if (dto.getLastName() != null) {
             entity.setLastName(dto.getLastName());
         }
-
         if (dto.getEmail() != null) {
             entity.setEmail(dto.getEmail());
         }
-
-        // Solo actualizar password si se proporciona uno nuevo
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             entity.setPassword(dto.getPassword());
         }
-
         if (dto.getPhoneNumber() != null) {
             entity.setPhoneNumber(dto.getPhoneNumber());
         }
-
         if (dto.getProfilePhoto() != null) {
             entity.setProfilePhoto(dto.getProfilePhoto());
         }
-
         if (dto.getAvailabilityState() != null) {
             entity.setState(AvailabilityStateEnum.valueOf(dto.getAvailabilityState().name()));
         }

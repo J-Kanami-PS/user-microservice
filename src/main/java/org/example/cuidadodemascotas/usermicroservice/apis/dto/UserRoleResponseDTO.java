@@ -20,7 +20,7 @@ import jakarta.annotation.Generated;
  * UserRoleResponseDTO
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T19:08:53.202801300-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-28T00:04:19.711678100-03:00[America/Asuncion]")
 public class UserRoleResponseDTO {
 
   private Long id;
@@ -28,6 +28,8 @@ public class UserRoleResponseDTO {
   private Long userId;
 
   private Long roleId;
+
+  private String roleName;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -43,11 +45,11 @@ public class UserRoleResponseDTO {
   }
 
   /**
-   * ID del registro de relación usuario-rol.
+   * ID de la relación usuario-rol
    * @return id
   */
   
-  @Schema(name = "id", description = "ID del registro de relación usuario-rol.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "id", description = "ID de la relación usuario-rol", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("id")
   public Long getId() {
     return id;
@@ -63,11 +65,11 @@ public class UserRoleResponseDTO {
   }
 
   /**
-   * ID del usuario asociado.
+   * ID del usuario
    * @return userId
   */
   
-  @Schema(name = "userId", description = "ID del usuario asociado.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "userId", description = "ID del usuario", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("userId")
   public Long getUserId() {
     return userId;
@@ -83,11 +85,11 @@ public class UserRoleResponseDTO {
   }
 
   /**
-   * ID del rol asociado.
+   * ID del rol
    * @return roleId
   */
   
-  @Schema(name = "roleId", description = "ID del rol asociado.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "roleId", description = "ID del rol", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("roleId")
   public Long getRoleId() {
     return roleId;
@@ -95,6 +97,26 @@ public class UserRoleResponseDTO {
 
   public void setRoleId(Long roleId) {
     this.roleId = roleId;
+  }
+
+  public UserRoleResponseDTO roleName(String roleName) {
+    this.roleName = roleName;
+    return this;
+  }
+
+  /**
+   * Nombre del rol asignado
+   * @return roleName
+  */
+  
+  @Schema(name = "roleName", description = "Nombre del rol asignado", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("roleName")
+  public String getRoleName() {
+    return roleName;
+  }
+
+  public void setRoleName(String roleName) {
+    this.roleName = roleName;
   }
 
   public UserRoleResponseDTO createdAt(OffsetDateTime createdAt) {
@@ -169,6 +191,7 @@ public class UserRoleResponseDTO {
     return Objects.equals(this.id, userRoleResponseDTO.id) &&
         Objects.equals(this.userId, userRoleResponseDTO.userId) &&
         Objects.equals(this.roleId, userRoleResponseDTO.roleId) &&
+        Objects.equals(this.roleName, userRoleResponseDTO.roleName) &&
         Objects.equals(this.createdAt, userRoleResponseDTO.createdAt) &&
         Objects.equals(this.updatedAt, userRoleResponseDTO.updatedAt) &&
         Objects.equals(this.active, userRoleResponseDTO.active);
@@ -176,7 +199,7 @@ public class UserRoleResponseDTO {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userId, roleId, createdAt, updatedAt, active);
+    return Objects.hash(id, userId, roleId, roleName, createdAt, updatedAt, active);
   }
 
   @Override
@@ -186,6 +209,7 @@ public class UserRoleResponseDTO {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    roleId: ").append(toIndentedString(roleId)).append("\n");
+    sb.append("    roleName: ").append(toIndentedString(roleName)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    active: ").append(toIndentedString(active)).append("\n");

@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * UserRoleRequestDTO
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T19:08:53.202801300-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-28T00:04:19.711678100-03:00[America/Asuncion]")
 public class UserRoleRequestDTO {
 
   private Long userId;
@@ -43,11 +43,11 @@ public class UserRoleRequestDTO {
   }
 
   /**
-   * ID del usuario asociado al rol.
+   * ID del usuario
    * @return userId
   */
   @NotNull 
-  @Schema(name = "userId", description = "ID del usuario asociado al rol.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "userId", description = "ID del usuario", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("userId")
   public Long getUserId() {
     return userId;
@@ -63,11 +63,11 @@ public class UserRoleRequestDTO {
   }
 
   /**
-   * ID del rol asignado al usuario.
+   * ID del rol a asignar
    * @return roleId
   */
   @NotNull 
-  @Schema(name = "roleId", description = "ID del rol asignado al usuario.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "roleId", description = "ID del rol a asignar", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("roleId")
   public Long getRoleId() {
     return roleId;

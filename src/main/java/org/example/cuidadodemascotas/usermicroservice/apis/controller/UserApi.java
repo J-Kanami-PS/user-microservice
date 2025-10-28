@@ -6,9 +6,13 @@
 package org.example.cuidadodemascotas.usermicroservice.apis.controller;
 
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.ApiError;
+import org.example.cuidadodemascotas.usermicroservice.apis.dto.AssignRoleRequestDTO;
+import org.example.cuidadodemascotas.usermicroservice.apis.dto.RoleResponseDTO;
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserPageResponse;
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserRequestDTO;
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserResponseDTO;
+import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserRoleCheckResponse;
+import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserRoleResponseDTO;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,10 +39,52 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T19:08:53.202801300-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-28T00:04:19.711678100-03:00[America/Asuncion]")
 @Validated
 @Tag(name = "User", description = "the User API")
 public interface UserApi {
+
+    /**
+     * POST /users/{userId}/roles : Asignar un rol al usuario
+     *
+     * @param userId ID del usuario (required)
+     * @param assignRoleRequestDTO  (required)
+     * @return Rol asignado exitosamente (status code 201)
+     *         or Solicitud inválida (status code 400)
+     *         or Recurso no encontrado (status code 404)
+     *         or Error interno del servidor (status code 500)
+     */
+    @Operation(
+        operationId = "assignRoleToUser",
+        summary = "Asignar un rol al usuario",
+        tags = { "User" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Rol asignado exitosamente", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserRoleResponseDTO.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/users/{userId}/roles",
+        produces = { "application/json" },
+        consumes = { "application/json" }
+    )
+    
+    ResponseEntity<UserRoleResponseDTO> assignRoleToUser(
+        @Parameter(name = "userId", description = "ID del usuario", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
+        @Parameter(name = "AssignRoleRequestDTO", description = "", required = true) @Valid @RequestBody AssignRoleRequestDTO assignRoleRequestDTO
+    );
+
 
     /**
      * GET /users/count : Contar todos los usuarios activos
@@ -67,41 +113,6 @@ public interface UserApi {
     
     ResponseEntity<Long> countUsers(
         
-    );
-
-
-    /**
-     * GET /users/count/role/{roleId} : Contar usuarios por role
-     *
-     * @param roleId  (required)
-     * @return Conteo de usuarios (status code 200)
-     *         or Role no encontrado (status code 404)
-     *         or Error interno del servidor (status code 500)
-     */
-    @Operation(
-        operationId = "countUsersByRole",
-        summary = "Contar usuarios por role",
-        tags = { "User" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Conteo de usuarios", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "Role no encontrado", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/users/count/role/{roleId}",
-        produces = { "application/json" }
-    )
-    
-    ResponseEntity<Long> countUsersByRole(
-        @Parameter(name = "roleId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("roleId") Long roleId
     );
 
 
@@ -144,9 +155,9 @@ public interface UserApi {
     /**
      * DELETE /users/{id} : Eliminar usuario (soft delete)
      *
-     * @param id  (required)
+     * @param id ID del recurso (required)
      * @return Usuario eliminado (status code 204)
-     *         or Usuario no encontrado (status code 404)
+     *         or Recurso no encontrado (status code 404)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
@@ -155,7 +166,7 @@ public interface UserApi {
         tags = { "User" },
         responses = {
             @ApiResponse(responseCode = "204", description = "Usuario eliminado"),
-            @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = {
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
@@ -170,22 +181,22 @@ public interface UserApi {
     )
     
     ResponseEntity<Void> deleteUser(
-        @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+        @Parameter(name = "id", description = "ID del recurso", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
     );
 
 
     /**
-     * GET /users/carers : Obtener todos los cuidadores
+     * GET /users/carers/available : Obtener cuidadores disponibles
      *
-     * @return Cuidadores obtenidos (status code 200)
+     * @return Cuidadores disponibles obtenidos (status code 200)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
-        operationId = "getCarers",
-        summary = "Obtener todos los cuidadores",
+        operationId = "getAvailableCarers",
+        summary = "Obtener cuidadores disponibles",
         tags = { "User" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Cuidadores obtenidos", content = {
+            @ApiResponse(responseCode = "200", description = "Cuidadores disponibles obtenidos", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserResponseDTO.class)))
             }),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
@@ -195,108 +206,12 @@ public interface UserApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/users/carers",
+        value = "/users/carers/available",
         produces = { "application/json" }
     )
     
-    ResponseEntity<List<UserResponseDTO>> getCarers(
+    ResponseEntity<List<UserResponseDTO>> getAvailableCarers(
         
-    );
-
-
-    /**
-     * GET /users/carers/paged : Obtener cuidadores con paginación
-     *
-     * @param page  (optional, default to 0)
-     * @param size  (optional, default to 20)
-     * @return Cuidadores obtenidos (status code 200)
-     *         or Error interno del servidor (status code 500)
-     */
-    @Operation(
-        operationId = "getCarersPaged",
-        summary = "Obtener cuidadores con paginación",
-        tags = { "User" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Cuidadores obtenidos", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = UserPageResponse.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/users/carers/paged",
-        produces = { "application/json" }
-    )
-    
-    ResponseEntity<UserPageResponse> getCarersPaged(
-        @Parameter(name = "page", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-        @Parameter(name = "size", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "size", required = false, defaultValue = "20") Integer size
-    );
-
-
-    /**
-     * GET /users/owners : Obtener todos los dueños
-     *
-     * @return Dueños obtenidos (status code 200)
-     *         or Error interno del servidor (status code 500)
-     */
-    @Operation(
-        operationId = "getOwners",
-        summary = "Obtener todos los dueños",
-        tags = { "User" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Dueños obtenidos", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserResponseDTO.class)))
-            }),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/users/owners",
-        produces = { "application/json" }
-    )
-    
-    ResponseEntity<List<UserResponseDTO>> getOwners(
-        
-    );
-
-
-    /**
-     * GET /users/owners/paged : Obtener dueños con paginación
-     *
-     * @param page  (optional, default to 0)
-     * @param size  (optional, default to 20)
-     * @return Dueños obtenidos (status code 200)
-     *         or Error interno del servidor (status code 500)
-     */
-    @Operation(
-        operationId = "getOwnersPaged",
-        summary = "Obtener dueños con paginación",
-        tags = { "User" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Dueños obtenidos", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = UserPageResponse.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/users/owners/paged",
-        produces = { "application/json" }
-    )
-    
-    ResponseEntity<UserPageResponse> getOwnersPaged(
-        @Parameter(name = "page", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-        @Parameter(name = "size", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "size", required = false, defaultValue = "20") Integer size
     );
 
 
@@ -305,7 +220,7 @@ public interface UserApi {
      *
      * @param email  (required)
      * @return Usuario obtenido (status code 200)
-     *         or Usuario no encontrado (status code 404)
+     *         or Recurso no encontrado (status code 404)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
@@ -316,7 +231,7 @@ public interface UserApi {
             @ApiResponse(responseCode = "200", description = "Usuario obtenido", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = {
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
@@ -331,16 +246,16 @@ public interface UserApi {
     )
     
     ResponseEntity<UserResponseDTO> getUserByEmail(
-        @Parameter(name = "email", description = "", required = true, in = ParameterIn.PATH) @PathVariable("email") String email
+        @jakarta.validation.constraints.Email @Parameter(name = "email", description = "", required = true, in = ParameterIn.PATH) @PathVariable("email") String email
     );
 
 
     /**
      * GET /users/{id} : Obtener usuario por ID
      *
-     * @param id  (required)
+     * @param id ID del recurso (required)
      * @return Usuario obtenido (status code 200)
-     *         or Usuario no encontrado (status code 404)
+     *         or Recurso no encontrado (status code 404)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
@@ -351,7 +266,7 @@ public interface UserApi {
             @ApiResponse(responseCode = "200", description = "Usuario obtenido", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = {
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
@@ -366,21 +281,58 @@ public interface UserApi {
     )
     
     ResponseEntity<UserResponseDTO> getUserById(
-        @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+        @Parameter(name = "id", description = "ID del recurso", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
     );
 
 
     /**
-     * GET /users : Obtener todos los usuarios con paginación
+     * GET /users/{userId}/roles : Obtener todos los roles de un usuario
      *
-     * @param page  (optional, default to 0)
-     * @param size  (optional, default to 20)
+     * @param userId ID del usuario (required)
+     * @return Roles del usuario (status code 200)
+     *         or Recurso no encontrado (status code 404)
+     *         or Error interno del servidor (status code 500)
+     */
+    @Operation(
+        operationId = "getUserRoles",
+        summary = "Obtener todos los roles de un usuario",
+        tags = { "User" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Roles del usuario", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = RoleResponseDTO.class)))
+            }),
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/users/{userId}/roles",
+        produces = { "application/json" }
+    )
+    
+    ResponseEntity<List<RoleResponseDTO>> getUserRoles(
+        @Parameter(name = "userId", description = "ID del usuario", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId
+    );
+
+
+    /**
+     * GET /users : Obtener usuarios con filtros
+     *
+     * @param role Filtrar por nombre de rol (CARER, OWNER, ADMIN) (optional)
+     * @param search Buscar por nombre, apellido o email (optional)
+     * @param page Número de página (0-based) (optional, default to 0)
+     * @param size Tamaño de la página (optional, default to 20)
      * @return Usuarios obtenidos (status code 200)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
         operationId = "getUsers",
-        summary = "Obtener todos los usuarios con paginación",
+        summary = "Obtener usuarios con filtros",
         tags = { "User" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Usuarios obtenidos", content = {
@@ -398,30 +350,31 @@ public interface UserApi {
     )
     
     ResponseEntity<UserPageResponse> getUsers(
-        @Parameter(name = "page", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-        @Parameter(name = "size", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "size", required = false, defaultValue = "20") Integer size
+        @Parameter(name = "role", description = "Filtrar por nombre de rol (CARER, OWNER, ADMIN)", in = ParameterIn.QUERY) @Valid @RequestParam(value = "role", required = false) String role,
+        @Parameter(name = "search", description = "Buscar por nombre, apellido o email", in = ParameterIn.QUERY) @Valid @RequestParam(value = "search", required = false) String search,
+        @Min(0) @Parameter(name = "page", description = "Número de página (0-based)", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+        @Min(1) @Max(100) @Parameter(name = "size", description = "Tamaño de la página", in = ParameterIn.QUERY) @Valid @RequestParam(value = "size", required = false, defaultValue = "20") Integer size
     );
 
 
     /**
-     * GET /users/role/{roleId} : Obtener usuarios por role con paginación
+     * GET /users/{userId}/has-role/{roleName} : Verificar si usuario tiene un rol específico
      *
-     * @param roleId  (required)
-     * @param page  (optional, default to 0)
-     * @param size  (optional, default to 20)
-     * @return Usuarios obtenidos (status code 200)
-     *         or Role no encontrado (status code 404)
+     * @param userId ID del usuario (required)
+     * @param roleName  (required)
+     * @return Verificación exitosa (status code 200)
+     *         or Recurso no encontrado (status code 404)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
-        operationId = "getUsersByRole",
-        summary = "Obtener usuarios por role con paginación",
+        operationId = "hasRole",
+        summary = "Verificar si usuario tiene un rol específico",
         tags = { "User" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Usuarios obtenidos", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = UserPageResponse.class))
+            @ApiResponse(responseCode = "200", description = "Verificación exitosa", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserRoleCheckResponse.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Role no encontrado", content = {
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
@@ -431,33 +384,34 @@ public interface UserApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/users/role/{roleId}",
+        value = "/users/{userId}/has-role/{roleName}",
         produces = { "application/json" }
     )
     
-    ResponseEntity<UserPageResponse> getUsersByRole(
-        @Parameter(name = "roleId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("roleId") Long roleId,
-        @Parameter(name = "page", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-        @Parameter(name = "size", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "size", required = false, defaultValue = "20") Integer size
+    ResponseEntity<UserRoleCheckResponse> hasRole(
+        @Parameter(name = "userId", description = "ID del usuario", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
+        @Parameter(name = "roleName", description = "", required = true, in = ParameterIn.PATH) @PathVariable("roleName") String roleName
     );
 
 
     /**
-     * GET /users/search/{text} : Buscar usuarios por nombre o apellido
+     * GET /users/{userId}/is-carer : Verificar si usuario es cuidador
      *
-     * @param text  (required)
-     * @param page  (optional, default to 0)
-     * @param size  (optional, default to 10)
-     * @return Usuarios encontrados (status code 200)
+     * @param userId ID del usuario (required)
+     * @return Verificación exitosa (status code 200)
+     *         or Recurso no encontrado (status code 404)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
-        operationId = "searchUsers",
-        summary = "Buscar usuarios por nombre o apellido",
+        operationId = "isCarer",
+        summary = "Verificar si usuario es cuidador",
         tags = { "User" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Usuarios encontrados", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = UserPageResponse.class))
+            @ApiResponse(responseCode = "200", description = "Verificación exitosa", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserRoleCheckResponse.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
@@ -466,25 +420,93 @@ public interface UserApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/users/search/{text}",
+        value = "/users/{userId}/is-carer",
         produces = { "application/json" }
     )
     
-    ResponseEntity<UserPageResponse> searchUsers(
-        @Parameter(name = "text", description = "", required = true, in = ParameterIn.PATH) @PathVariable("text") String text,
-        @Parameter(name = "page", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-        @Parameter(name = "size", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "size", required = false, defaultValue = "10") Integer size
+    ResponseEntity<UserRoleCheckResponse> isCarer(
+        @Parameter(name = "userId", description = "ID del usuario", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId
+    );
+
+
+    /**
+     * GET /users/{userId}/is-owner : Verificar si usuario es dueño
+     *
+     * @param userId ID del usuario (required)
+     * @return Verificación exitosa (status code 200)
+     *         or Recurso no encontrado (status code 404)
+     *         or Error interno del servidor (status code 500)
+     */
+    @Operation(
+        operationId = "isOwner",
+        summary = "Verificar si usuario es dueño",
+        tags = { "User" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Verificación exitosa", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserRoleCheckResponse.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/users/{userId}/is-owner",
+        produces = { "application/json" }
+    )
+    
+    ResponseEntity<UserRoleCheckResponse> isOwner(
+        @Parameter(name = "userId", description = "ID del usuario", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId
+    );
+
+
+    /**
+     * DELETE /users/{userId}/roles/{roleId} : Remover un rol del usuario
+     *
+     * @param userId ID del usuario (required)
+     * @param roleId ID del rol (required)
+     * @return Rol removido exitosamente (status code 204)
+     *         or Recurso no encontrado (status code 404)
+     *         or Error interno del servidor (status code 500)
+     */
+    @Operation(
+        operationId = "removeRoleFromUser",
+        summary = "Remover un rol del usuario",
+        tags = { "User" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Rol removido exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/users/{userId}/roles/{roleId}",
+        produces = { "application/json" }
+    )
+    
+    ResponseEntity<Void> removeRoleFromUser(
+        @Parameter(name = "userId", description = "ID del usuario", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
+        @Parameter(name = "roleId", description = "ID del rol", required = true, in = ParameterIn.PATH) @PathVariable("roleId") Long roleId
     );
 
 
     /**
      * PUT /users/{id} : Actualizar usuario
      *
-     * @param id  (required)
+     * @param id ID del recurso (required)
      * @param userRequestDTO  (required)
      * @return Usuario actualizado (status code 200)
      *         or Solicitud inválida (status code 400)
-     *         or Usuario no encontrado (status code 404)
+     *         or Recurso no encontrado (status code 404)
      *         or Error interno del servidor (status code 500)
      */
     @Operation(
@@ -498,7 +520,7 @@ public interface UserApi {
             @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
-            @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = {
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class))
             }),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = {
@@ -514,7 +536,7 @@ public interface UserApi {
     )
     
     ResponseEntity<UserResponseDTO> updateUser(
-        @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
+        @Parameter(name = "id", description = "ID del recurso", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
         @Parameter(name = "UserRequestDTO", description = "", required = true) @Valid @RequestBody UserRequestDTO userRequestDTO
     );
 

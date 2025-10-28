@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.example.cuidadodemascotas.usermicroservice.apis.dto.RoleResponseDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
@@ -21,7 +25,7 @@ import jakarta.annotation.Generated;
  * UserResponseDTO
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T19:08:53.202801300-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-28T00:04:19.711678100-03:00[America/Asuncion]")
 public class UserResponseDTO {
 
   private Long id;
@@ -82,6 +86,9 @@ public class UserResponseDTO {
   private OffsetDateTime updatedAt;
 
   private Boolean active;
+
+  @Valid
+  private List<@Valid RoleResponseDTO> roles;
 
   public UserResponseDTO id(Long id) {
     this.id = id;
@@ -283,6 +290,34 @@ public class UserResponseDTO {
     this.active = active;
   }
 
+  public UserResponseDTO roles(List<@Valid RoleResponseDTO> roles) {
+    this.roles = roles;
+    return this;
+  }
+
+  public UserResponseDTO addRolesItem(RoleResponseDTO rolesItem) {
+    if (this.roles == null) {
+      this.roles = new ArrayList<>();
+    }
+    this.roles.add(rolesItem);
+    return this;
+  }
+
+  /**
+   * Get roles
+   * @return roles
+  */
+  @Valid 
+  @Schema(name = "roles", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("roles")
+  public List<@Valid RoleResponseDTO> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<@Valid RoleResponseDTO> roles) {
+    this.roles = roles;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -301,12 +336,13 @@ public class UserResponseDTO {
         Objects.equals(this.availabilityState, userResponseDTO.availabilityState) &&
         Objects.equals(this.createdAt, userResponseDTO.createdAt) &&
         Objects.equals(this.updatedAt, userResponseDTO.updatedAt) &&
-        Objects.equals(this.active, userResponseDTO.active);
+        Objects.equals(this.active, userResponseDTO.active) &&
+        Objects.equals(this.roles, userResponseDTO.roles);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, lastName, email, phoneNumber, profilePhoto, availabilityState, createdAt, updatedAt, active);
+    return Objects.hash(id, name, lastName, email, phoneNumber, profilePhoto, availabilityState, createdAt, updatedAt, active, roles);
   }
 
   @Override
@@ -323,6 +359,7 @@ public class UserResponseDTO {
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    active: ").append(toIndentedString(active)).append("\n");
+    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("}");
     return sb.toString();
   }

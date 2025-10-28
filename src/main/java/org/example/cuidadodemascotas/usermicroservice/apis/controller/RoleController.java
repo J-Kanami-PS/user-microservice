@@ -32,7 +32,6 @@ public class RoleController {
 
     /**
      * GET /roles/search/{name}
-     * (antes era /roles/search?name=xxx)
      */
     @GetMapping("/search/{name}")
     public ResponseEntity<List<RoleResponseDTO>> searchRoles(@PathVariable String name) {
@@ -67,9 +66,7 @@ public class RoleController {
     @PostMapping
     public ResponseEntity<RoleResponseDTO> createRole(@Valid @RequestBody RoleRequestDTO dto) {
         log.info("POST /roles - Creating role: {}", dto.getName());
-
         RoleResponseDTO created = roleService.create(dto);
-
         log.info("Role created successfully with id: {}", created.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
@@ -81,11 +78,8 @@ public class RoleController {
     public ResponseEntity<RoleResponseDTO> updateRole(
             @PathVariable Long id,
             @Valid @RequestBody RoleRequestDTO dto) {
-
         log.info("PUT /roles/{}", id);
-
         RoleResponseDTO updated = roleService.update(id, dto);
-
         log.info("Role updated successfully: {}", id);
         return ResponseEntity.ok(updated);
     }
@@ -96,9 +90,7 @@ public class RoleController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         log.info("DELETE /roles/{}", id);
-
         roleService.delete(id);
-
         log.info("Role deleted successfully: {}", id);
         return ResponseEntity.noContent().build();
     }
