@@ -32,7 +32,7 @@ public class UserController {
 
         log.info("GET /users - page={}, size={}", page, size);
 
-        Page<UserResponseDTO> result = userService.findByFilters(null, null, page, size);
+        Page<UserResponseDTO> result = userService.findByFilters(null, page, size);
         return ResponseEntity.ok(result);
     }
 
@@ -40,6 +40,7 @@ public class UserController {
      * GET /users/role/{roleId}?page=0&size=20
      * Obtener usuarios por role (roleId en path, paginación en query)
      */
+    /*
     @GetMapping("/role/{roleId}")
     public ResponseEntity<Page<UserResponseDTO>> getUsersByRole(
             @PathVariable Long roleId,
@@ -48,9 +49,10 @@ public class UserController {
 
         log.info("GET /users/role/{} - page={}, size={}", roleId, page, size);
 
-        Page<UserResponseDTO> result = userService.findByRoleId(roleId, page, size);
-        return ResponseEntity.ok(result);
+        //Page<UserResponseDTO> result = userService.findByRoleId(page, size);
+        return ResponseEntity.ok(userService.findByFilters(roleId, page, size));
     }
+     */
 
     /**
      * GET /users/search/{text}?page=0&size=10
@@ -91,16 +93,19 @@ public class UserController {
     /**
      * GET /users/carers
      */
+    /*
     @GetMapping("/carers")
     public ResponseEntity<List<UserResponseDTO>> getCarers() {
         log.info("GET /users/carers");
         List<UserResponseDTO> carers = userService.findAllCarers();
         return ResponseEntity.ok(carers);
     }
+     */
 
     /**
      * GET /users/carers/paged?page=0&size=20
      */
+    /*
     @GetMapping("/carers/paged")
     public ResponseEntity<Page<UserResponseDTO>> getCarersPaged(
             @RequestParam(defaultValue = "0") int page,
@@ -110,20 +115,24 @@ public class UserController {
         Page<UserResponseDTO> carers = userService.findByRoleName("CARER", page, size);
         return ResponseEntity.ok(carers);
     }
+    */
 
     /**
      * GET /users/owners
      */
+    /*
     @GetMapping("/owners")
     public ResponseEntity<List<UserResponseDTO>> getOwners() {
         log.info("GET /users/owners");
         List<UserResponseDTO> owners = userService.findAllOwners();
         return ResponseEntity.ok(owners);
     }
+     */
 
     /**
      * GET /users/owners/paged?page=0&size=20
      */
+    /*
     @GetMapping("/owners/paged")
     public ResponseEntity<Page<UserResponseDTO>> getOwnersPaged(
             @RequestParam(defaultValue = "0") int page,
@@ -133,6 +142,7 @@ public class UserController {
         Page<UserResponseDTO> owners = userService.findByRoleName("OWNER", page, size);
         return ResponseEntity.ok(owners);
     }
+     */
 
     /**
      * POST /users
@@ -179,20 +189,24 @@ public class UserController {
     /**
      * GET /users/count
      */
+    /*
     @GetMapping("/count")
     public ResponseEntity<Long> countUsers() {
         log.info("GET /users/count");
         long count = userService.countActiveUsers();
         return ResponseEntity.ok(count);
     }
+     */
 
     /**
      * GET /users/count/role/{roleId}
      */
+    /*
     @GetMapping("/count/role/{roleId}")
     public ResponseEntity<Long> countUsersByRole(@PathVariable Long roleId) {
         log.info("GET /users/count/role/{}", roleId);
         long count = userService.countByRoleId(roleId);
         return ResponseEntity.ok(count);
     }
+     */
 }

@@ -885,7 +885,6 @@ components:
         - email
         - password
         - phoneNumber
-        - roleId
       properties:
         name:
           type: string
@@ -905,9 +904,6 @@ components:
           pattern: '^[0-9]{10,15}$'
         profilePhoto:
           type: string
-        roleId:
-          type: integer
-          format: int64
         availabilityState:
           type: string
           enum: [AVAILABLE, NOT_AVAILABLE, BUSY]
@@ -928,9 +924,6 @@ components:
           type: string
         profilePhoto:
           type: string
-        roleId:
-          type: integer
-          format: int64
         availabilityState:
           type: string
           enum: [AVAILABLE, NOT_AVAILABLE, BUSY]

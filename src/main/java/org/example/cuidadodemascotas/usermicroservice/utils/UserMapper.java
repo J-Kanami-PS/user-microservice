@@ -25,7 +25,6 @@ public class UserMapper {
         dto.setEmail(entity.getEmail());
         dto.setPhoneNumber(entity.getPhoneNumber());
         dto.setProfilePhoto(entity.getProfilePhoto());
-        dto.setRoleId(entity.getRole() != null ? entity.getRole().getId() : null);
 
         if (entity.getState() != null) {
             dto.setAvailabilityState(
@@ -49,15 +48,9 @@ public class UserMapper {
         entity.setName(dto.getName());
         entity.setLastName(dto.getLastName());
         entity.setEmail(dto.getEmail());
-        entity.setPassword(dto.getPassword()); // Solo en creación (TODO: hashear en producción)
+        entity.setPassword(dto.getPassword());
         entity.setPhoneNumber(dto.getPhoneNumber());
         entity.setProfilePhoto(dto.getProfilePhoto());
-
-        if (dto.getRoleId() != null) {
-            Role role = new Role();
-            role.setId(dto.getRoleId());
-            entity.setRole(role);
-        }
 
         if (dto.getAvailabilityState() != null) {
             entity.setState(AvailabilityStateEnum.valueOf(dto.getAvailabilityState().name()));
@@ -87,7 +80,7 @@ public class UserMapper {
 
         // Solo actualizar password si se proporciona uno nuevo
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            entity.setPassword(dto.getPassword()); // TODO: hashear en producción
+            entity.setPassword(dto.getPassword());
         }
 
         if (dto.getPhoneNumber() != null) {
@@ -96,12 +89,6 @@ public class UserMapper {
 
         if (dto.getProfilePhoto() != null) {
             entity.setProfilePhoto(dto.getProfilePhoto());
-        }
-
-        if (dto.getRoleId() != null) {
-            Role role = new Role();
-            role.setId(dto.getRoleId());
-            entity.setRole(role);
         }
 
         if (dto.getAvailabilityState() != null) {

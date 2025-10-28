@@ -68,19 +68,19 @@ public class UserService {
     /**
      * Búsqueda con filtros opcionales
      * Acepta: roleId, searchTerm (name, lastName, email)
+     * CAMBIÓ
      */
     public Page<UserResponseDTO> findByFilters(
-            Long roleId,
             String searchTerm,
             int page,
             int size) {
 
-        log.debug("Filtering users - roleId: {}, searchTerm: {}", roleId, searchTerm);
+        log.debug("Filtering users - searchTerm: {}", searchTerm);
 
         int pageSize = size > 0 ? size : defaultPageSize;
         Pageable pageable = PageRequest.of(page, pageSize);
 
-        Page<User> result = userRepository.findByFilters(roleId, searchTerm, pageable);
+        Page<User> result = userRepository.findByFilters(searchTerm, pageable);
 
         return result.map(userMapper::toDto);
     }
@@ -88,6 +88,7 @@ public class UserService {
     /**
      * Obtener usuarios por role específico
      */
+    /*
     public Page<UserResponseDTO> findByRoleId(Long roleId, int page, int size) {
         log.debug("Finding users by roleId: {}", roleId);
 
@@ -97,10 +98,12 @@ public class UserService {
         Page<User> result = userRepository.findByRoleIdAndActiveTrue(roleId, pageable);
         return result.map(userMapper::toDto);
     }
+     */
 
     /**
      * Obtener usuarios por nombre de role (CARER, OWNER, etc.)
      */
+    /*
     public Page<UserResponseDTO> findByRoleName(String roleName, int page, int size) {
         log.debug("Finding users by roleName: {}", roleName);
 
@@ -110,6 +113,7 @@ public class UserService {
         Page<User> result = userRepository.findByRoleNameAndActiveTrue(roleName, pageable);
         return result.map(userMapper::toDto);
     }
+    */
 
     /**
      * Buscar usuarios por nombre/apellido
@@ -155,7 +159,6 @@ public class UserService {
 
         userMapper.updateEntityFromDto(dto, existing);
 
-        // TODO: Si se actualiza el password, hashearlo
         // if (dto.getPassword() != null) {
         //     existing.setPassword(passwordEncoder.encode(dto.getPassword()));
         // }
@@ -180,6 +183,7 @@ public class UserService {
     /**
      * Obtener todos los cuidadores (role = CARER)
      */
+    /*
     public List<UserResponseDTO> findAllCarers() {
         log.debug("Finding all carers");
         List<User> carers = userRepository.findByRoleNameAndActiveTrue("CARER");
@@ -187,10 +191,12 @@ public class UserService {
                 .map(userMapper::toDto)
                 .toList();
     }
+     */
 
     /**
      * Obtener todos los dueños (role = OWNER)
      */
+    /*
     public List<UserResponseDTO> findAllOwners() {
         log.debug("Finding all owners");
         List<User> owners = userRepository.findByRoleNameAndActiveTrue("OWNER");
@@ -198,10 +204,12 @@ public class UserService {
                 .map(userMapper::toDto)
                 .toList();
     }
+     */
 
     /**
      * Contar usuarios por role
      */
+    /*
     public long countByRoleId(Long roleId) {
         return userRepository.countByRoleId(roleId);
     }
@@ -209,6 +217,8 @@ public class UserService {
     public long countActiveUsers() {
         return userRepository.countByActiveTrue();
     }
+
+     */
 
     // ==================== MÉTODOS PRIVADOS ====================
 
@@ -236,10 +246,6 @@ public class UserService {
 
         if (dto.getPhoneNumber() == null || dto.getPhoneNumber().isBlank()) {
             throw new IllegalArgumentException("El teléfono es requerido");
-        }
-
-        if (dto.getRoleId() == null) {
-            throw new IllegalArgumentException("El role es requerido");
         }
     }
 }

@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  * UserResponseDTO
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T13:15:11.948410900-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T19:08:53.202801300-03:00[America/Asuncion]")
 public class UserResponseDTO {
 
   private Long id;
@@ -35,8 +35,6 @@ public class UserResponseDTO {
   private String phoneNumber;
 
   private String profilePhoto;
-
-  private Long roleId;
 
   /**
    * Gets or Sets availabilityState
@@ -205,26 +203,6 @@ public class UserResponseDTO {
     this.profilePhoto = profilePhoto;
   }
 
-  public UserResponseDTO roleId(Long roleId) {
-    this.roleId = roleId;
-    return this;
-  }
-
-  /**
-   * Get roleId
-   * @return roleId
-  */
-  
-  @Schema(name = "roleId", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("roleId")
-  public Long getRoleId() {
-    return roleId;
-  }
-
-  public void setRoleId(Long roleId) {
-    this.roleId = roleId;
-  }
-
   public UserResponseDTO availabilityState(AvailabilityStateEnum availabilityState) {
     this.availabilityState = availabilityState;
     return this;
@@ -320,7 +298,6 @@ public class UserResponseDTO {
         Objects.equals(this.email, userResponseDTO.email) &&
         Objects.equals(this.phoneNumber, userResponseDTO.phoneNumber) &&
         Objects.equals(this.profilePhoto, userResponseDTO.profilePhoto) &&
-        Objects.equals(this.roleId, userResponseDTO.roleId) &&
         Objects.equals(this.availabilityState, userResponseDTO.availabilityState) &&
         Objects.equals(this.createdAt, userResponseDTO.createdAt) &&
         Objects.equals(this.updatedAt, userResponseDTO.updatedAt) &&
@@ -329,7 +306,7 @@ public class UserResponseDTO {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, lastName, email, phoneNumber, profilePhoto, roleId, availabilityState, createdAt, updatedAt, active);
+    return Objects.hash(id, name, lastName, email, phoneNumber, profilePhoto, availabilityState, createdAt, updatedAt, active);
   }
 
   @Override
@@ -342,7 +319,6 @@ public class UserResponseDTO {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    phoneNumber: ").append(toIndentedString(phoneNumber)).append("\n");
     sb.append("    profilePhoto: ").append(toIndentedString(profilePhoto)).append("\n");
-    sb.append("    roleId: ").append(toIndentedString(roleId)).append("\n");
     sb.append("    availabilityState: ").append(toIndentedString(availabilityState)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");

@@ -117,7 +117,7 @@
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>CuidadoDeMascota</artifactId>
-            <version>3.0.1</version>
+            <version>4.0.0</version>
             <scope>compile</scope>
             <classifier>entities</classifier>
         </dependency>
@@ -125,7 +125,7 @@
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>CuidadoDeMascota</artifactId>
-            <version>3.0.1</version>
+            <version>4.0.0</version>
             <scope>compile</scope>
             <classifier>dtos</classifier>
         </dependency>

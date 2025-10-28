@@ -19,7 +19,7 @@ import jakarta.annotation.Generated;
  * UserRequestDTO
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T13:15:11.948410900-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-10-27T19:08:53.202801300-03:00[America/Asuncion]")
 public class UserRequestDTO {
 
   private String name;
@@ -33,8 +33,6 @@ public class UserRequestDTO {
   private String phoneNumber;
 
   private String profilePhoto;
-
-  private Long roleId;
 
   /**
    * Gets or Sets availabilityState
@@ -82,13 +80,12 @@ public class UserRequestDTO {
   /**
    * Constructor with only required parameters
    */
-  public UserRequestDTO(String name, String lastName, String email, String password, String phoneNumber, Long roleId) {
+  public UserRequestDTO(String name, String lastName, String email, String password, String phoneNumber) {
     this.name = name;
     this.lastName = lastName;
     this.email = email;
     this.password = password;
     this.phoneNumber = phoneNumber;
-    this.roleId = roleId;
   }
 
   public UserRequestDTO name(String name) {
@@ -211,26 +208,6 @@ public class UserRequestDTO {
     this.profilePhoto = profilePhoto;
   }
 
-  public UserRequestDTO roleId(Long roleId) {
-    this.roleId = roleId;
-    return this;
-  }
-
-  /**
-   * Get roleId
-   * @return roleId
-  */
-  @NotNull 
-  @Schema(name = "roleId", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("roleId")
-  public Long getRoleId() {
-    return roleId;
-  }
-
-  public void setRoleId(Long roleId) {
-    this.roleId = roleId;
-  }
-
   public UserRequestDTO availabilityState(AvailabilityStateEnum availabilityState) {
     this.availabilityState = availabilityState;
     return this;
@@ -266,13 +243,12 @@ public class UserRequestDTO {
         Objects.equals(this.password, userRequestDTO.password) &&
         Objects.equals(this.phoneNumber, userRequestDTO.phoneNumber) &&
         Objects.equals(this.profilePhoto, userRequestDTO.profilePhoto) &&
-        Objects.equals(this.roleId, userRequestDTO.roleId) &&
         Objects.equals(this.availabilityState, userRequestDTO.availabilityState);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, lastName, email, password, phoneNumber, profilePhoto, roleId, availabilityState);
+    return Objects.hash(name, lastName, email, password, phoneNumber, profilePhoto, availabilityState);
   }
 
   @Override
@@ -285,7 +261,6 @@ public class UserRequestDTO {
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("    phoneNumber: ").append(toIndentedString(phoneNumber)).append("\n");
     sb.append("    profilePhoto: ").append(toIndentedString(profilePhoto)).append("\n");
-    sb.append("    roleId: ").append(toIndentedString(roleId)).append("\n");
     sb.append("    availabilityState: ").append(toIndentedString(availabilityState)).append("\n");
     sb.append("}");
     return sb.toString();
