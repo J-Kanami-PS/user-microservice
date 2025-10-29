@@ -139,4 +139,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("roleName") String roleName,
             @Param("availabilityState") String availabilityState
     );
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.userRoles WHERE u.email = :email AND u.active = true")
+    Optional<User> findByEmailAndActiveTrueWithRoles(@Param("email") String email);
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.userRoles ur LEFT JOIN FETCH ur.role WHERE u.email = :email AND u.active = true")
+    Optional<User> findByEmailWithRoles(@Param("email") String email);
+
+
+
+
 }

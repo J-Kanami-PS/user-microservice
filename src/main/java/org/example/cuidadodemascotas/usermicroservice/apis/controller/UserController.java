@@ -145,7 +145,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO dto) {
-        log.info("POST /users - Creating user: {}", dto.getEmail());
+        log.info("POST /auth - Creating user: {}", dto.getEmail());
         UserResponseDTO created = userService.create(dto);
         log.info("User created successfully with id: {}", created.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
