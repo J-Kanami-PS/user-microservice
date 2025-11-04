@@ -1,5 +1,6 @@
 package org.example.cuidadodemascotas.usermicroservice.auth;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cuidadodemascota.commons.entities.user.Role;
 import org.example.cuidadodemascota.commons.entities.user.User;
@@ -9,37 +10,37 @@ import org.example.cuidadodemascotas.usermicroservice.apis.repository.RoleReposi
 import org.example.cuidadodemascotas.usermicroservice.apis.repository.UserRepository;
 import org.example.cuidadodemascotas.usermicroservice.apis.repository.UserRoleRepository;
 import org.example.cuidadodemascotas.usermicroservice.exception.BadRequestException;
+import org.example.cuidadodemascotas.usermicroservice.jwt.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
-import org.example.cuidadodemascotas.usermicroservice.jwt.JwtService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
+
     @Autowired
     private final WebClient.Builder webClientBuilder;
     @Autowired
-    private UserRepository userDao;
-    @Autowired
     private final JwtService jwtService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private AuthenticationManager authenticationManager;
     @Autowired
     private final UserRepository userRepository;
     @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
     @Autowired
-    private UserRoleRepository userRoleRepository;
+    private final UserRoleRepository userRoleRepository;
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private final AuthenticationManager authenticationManager;
 
+    @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
         try {
             // Spring Security hace la autenticación
@@ -50,67 +51,59 @@ public class AuthService {
             throw new BadRequestException("Email o contraseña incorrectos.", e);
         }
 
-        // Traer tu entidad User
-        User userEntity = userDao.findByEmailAndActiveTrue(request.getEmail())
-                .orElseThrow();
+        // Trae el usuario con los roles ya cargados
+        User userEntity = userRepository.findByEmailWithRoles(request.getEmail())
+                .orElseThrow(() -> new BadRequestException("Usuario no encontrado o inactivo."));
 
         // Envolver en CustomUserDetails
         UserDetails userDetails = new CustomUserDetails(userEntity);
 
-        // Generar el token usando UserDetails
+        // Generar el token JWT
         String token = jwtService.getToken(userDetails);
 
         return AuthResponse.builder()
-                .token(token)
+                .token("Bearer " + token)
                 .build();
     }
 
+    @Transactional
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("El usuario ya existe");
+            throw new BadRequestException("El usuario ya existe");
         }
 
-        // Crear usuario base
-
-        org.example.cuidadodemascota.commons.entities.user.User user =
-                new org.example.cuidadodemascota.commons.entities.user.User();
+        User user = new User();
         user.setName(request.getName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPhoneNumber(request.getPhoneNumber());
-
-        // Guardar primero el usuario para obtener su ID
         userRepository.save(user);
 
-        // 🔹 Crear relaciones UserRole (tabla intermedia)
         if (request.getRoles() != null && !request.getRoles().isEmpty()) {
             for (Integer roleId : request.getRoles()) {
                 Role role = roleRepository.findById(Long.valueOf(roleId))
-                        .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + roleId));
+                        .orElseThrow(() -> new BadRequestException("Rol no encontrado: " + roleId));
 
                 UserRole userRole = new UserRole();
                 userRole.setUser(user);
                 userRole.setRole(role);
-
                 userRoleRepository.save(userRole);
             }
         } else {
-            // Si no envía roles, podés asignar uno por defecto
             Role defaultRole = roleRepository.findByName("ROLE_USER")
-                    .orElseThrow(() -> new RuntimeException("Rol por defecto no encontrado"));
+                    .orElseThrow(() -> new BadRequestException("Rol por defecto no encontrado"));
             UserRole defaultUserRole = new UserRole();
             defaultUserRole.setUser(user);
             defaultUserRole.setRole(defaultRole);
             userRoleRepository.save(defaultUserRole);
         }
 
-        // 🔹 Generar token JWT
+        // Generar token JWT desde email
         String token = jwtService.getTokenFromEmail(user.getEmail());
 
-        return new AuthResponse(token);
+        return AuthResponse.builder()
+                .token("Bearer " + token)
+                .build();
     }
-
-
-
 }

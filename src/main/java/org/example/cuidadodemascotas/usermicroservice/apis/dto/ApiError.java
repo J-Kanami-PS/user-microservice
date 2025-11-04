@@ -20,7 +20,7 @@ import jakarta.annotation.Generated;
  * ApiError
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-11-02T15:04:01.130234400-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-11-04T02:41:04.321297200-03:00[America/Asuncion]")
 public class ApiError {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
