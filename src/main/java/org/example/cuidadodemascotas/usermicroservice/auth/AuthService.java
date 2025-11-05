@@ -2,6 +2,7 @@ package org.example.cuidadodemascotas.usermicroservice.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.cuidadodemascota.commons.entities.enums.AvailabilityStateEnum;
 import org.example.cuidadodemascota.commons.entities.user.Role;
 import org.example.cuidadodemascota.commons.entities.user.User;
 import org.example.cuidadodemascota.commons.entities.user.UserRole;
@@ -72,14 +73,31 @@ public class AuthService {
             throw new BadRequestException("El usuario ya existe");
         }
 
+        // DEBUG: Verificar el estado recibido
+        log.info("Registering user - State received: {}", request.getState());
+        log.info("State type: {}", request.getState() != null ? request.getState().getClass().getName() : "NULL");
+
         User user = new User();
         user.setName(request.getName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPhoneNumber(request.getPhoneNumber());
+
+        // ESTA ES LA LÍNEA CLAVE - establecer el estado
+        if (request.getState() != null) {
+            user.setState(request.getState());
+        } else {
+            // Valor por defecto si no se envía el estado
+            user.setState(AvailabilityStateEnum.AVAILABLE);
+            log.info("State was null, setting default: AVAILABLE");
+        }
+
+        log.info("User state before save: {}", user.getState());
+
         userRepository.save(user);
 
+        // El resto del código para roles permanece igual
         if (request.getRoles() != null && !request.getRoles().isEmpty()) {
             for (Integer roleId : request.getRoles()) {
                 Role role = roleRepository.findById(Long.valueOf(roleId))
@@ -91,7 +109,7 @@ public class AuthService {
                 userRoleRepository.save(userRole);
             }
         } else {
-            Role defaultRole = roleRepository.findByName("ROLE_USER")
+            Role defaultRole = roleRepository.findByName("OWNER")
                     .orElseThrow(() -> new BadRequestException("Rol por defecto no encontrado"));
             UserRole defaultUserRole = new UserRole();
             defaultUserRole.setUser(user);
@@ -99,7 +117,6 @@ public class AuthService {
             userRoleRepository.save(defaultUserRole);
         }
 
-        // Generar token JWT desde email
         String token = jwtService.getTokenFromEmail(user.getEmail());
 
         return AuthResponse.builder()
