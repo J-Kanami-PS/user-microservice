@@ -92,9 +92,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getTokenFromRequest(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring(7);
+        if (!StringUtils.hasText(authHeader) || !authHeader.startsWith("Bearer ")) {
+            return null;
         }
-        return null;
+
+        // Quitar prefijo y limpiar token
+        String token = authHeader.substring(7).trim();
+
+        // Eliminar saltos de línea o espacios ocultos
+        token = token.replaceAll("[\\r\\n\\t ]", "");
+
+        return token;
     }
+
 }

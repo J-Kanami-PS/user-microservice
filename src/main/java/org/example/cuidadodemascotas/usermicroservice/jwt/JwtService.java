@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
+// NO USAR Decoders.BASE64
+import java.nio.charset.StandardCharsets; // <-- ¡ASEGÚRATE DE AÑADIR ESTE IMPORT!
 import io.jsonwebtoken.security.Keys;
 import java.util.function.Function;
 
@@ -40,7 +41,8 @@ public class JwtService {
 
         // Convertir las autoridades (roles) y prefijarlas con "ROLE_"
         String roles = user.getAuthorities().stream()
-                .map(authority -> "ROLE_" + authority.getAuthority()) // Asegura que el rol tenga el prefijo "ROLE_"
+                // ¡CORRECCIÓN #1: Añadir .toUpperCase()!
+                .map(authority -> "ROLE_" + authority.getAuthority().toUpperCase())
                 .collect(Collectors.joining(","));
 
         // Añadir los roles al payload del JWT
@@ -59,7 +61,8 @@ public class JwtService {
 
     // Obtener la clave para firmar el token
     private Key getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        // ¡CORRECCIÓN #2: Usar UTF_8 en lugar de Base64!
+        byte[] keyBytes = SECRET_KEY.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -108,5 +111,4 @@ public class JwtService {
         );
         return getToken(user);
     }
-
 }

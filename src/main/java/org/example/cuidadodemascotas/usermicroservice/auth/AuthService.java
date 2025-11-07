@@ -120,7 +120,7 @@ public class AuthService {
         String token = jwtService.getTokenFromEmail(user.getEmail());
 
         return AuthResponse.builder()
-                .token("Bearer " + token)
+                .token(token)
                 .build();
     }
 }
