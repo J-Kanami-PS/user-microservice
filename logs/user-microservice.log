@@ -1187,3 +1187,294 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
 2025-11-08 03:09:09 [SpringApplicationShutdownHook] INFO  c.netflix.discovery.DiscoveryClient - Completed shut down of DiscoveryClient
+2025-11-08 03:30:50 [restartedMain] INFO  o.e.c.u.UserMicroserviceApplication - Starting UserMicroserviceApplication using Java 21.0.8 with PID 12316 (C:\Users\HP\IdeaProjects\user-microservice\target\classes started by HP in C:\Users\HP\IdeaProjects\user-microservice)
+2025-11-08 03:30:50 [restartedMain] DEBUG o.e.c.u.UserMicroserviceApplication - Running with Spring Boot v3.5.5, Spring v6.2.10
+2025-11-08 03:30:50 [restartedMain] INFO  o.e.c.u.UserMicroserviceApplication - No active profile set, falling back to 1 default profile: "default"
+2025-11-08 03:30:50 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-11-08 03:30:50 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-11-08 03:30:52 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-08 03:30:52 [restartedMain] DEBUG o.s.d.r.c.RepositoryConfigurationDelegate - Scanning for JPA repositories in packages org.example.cuidadodemascotas.usermicroservice.apis.repository.
+2025-11-08 03:30:52 [restartedMain] DEBUG o.s.d.r.c.RepositoryComponentProvider - Identified candidate component class: file [C:\Users\HP\IdeaProjects\user-microservice\target\classes\org\example\cuidadodemascotas\usermicroservice\apis\repository\RoleRepository.class]
+2025-11-08 03:30:52 [restartedMain] DEBUG o.s.d.r.c.RepositoryComponentProvider - Identified candidate component class: file [C:\Users\HP\IdeaProjects\user-microservice\target\classes\org\example\cuidadodemascotas\usermicroservice\apis\repository\UserRepository.class]
+2025-11-08 03:30:52 [restartedMain] DEBUG o.s.d.r.c.RepositoryComponentProvider - Identified candidate component class: file [C:\Users\HP\IdeaProjects\user-microservice\target\classes\org\example\cuidadodemascotas\usermicroservice\apis\repository\UserRoleRepository.class]
+2025-11-08 03:30:52 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 153 ms. Found 3 JPA repository interfaces.
+2025-11-08 03:30:53 [restartedMain] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=9054e119-fffa-3225-a090-29829aca9cb1
+2025-11-08 03:30:53 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2025-11-08 03:30:53 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-08 03:30:53 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2025-11-08 03:30:53 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-08 03:30:53 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3476 ms
+2025-11-08 03:30:54 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-08 03:30:54 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-11-08 03:30:54 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-11-08 03:30:54 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-08 03:30:54 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-11-08 03:30:55 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@271e46b2
+2025-11-08 03:30:55 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-11-08 03:30:55 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-08 03:30:56 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-08 03:30:57 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-08 03:30:57 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-08 03:30:57 [restartedMain] DEBUG o.s.d.j.r.c.JpaMetamodelMappingContextFactoryBean - Initializing JpaMetamodelMappingContext…
+2025-11-08 03:30:57 [restartedMain] DEBUG o.s.d.j.r.c.JpaMetamodelMappingContextFactoryBean - Finished initializing JpaMetamodelMappingContext
+2025-11-08 03:30:57 [restartedMain] DEBUG o.s.d.r.c.s.RepositoryFactorySupport - Initializing repository instance for org.example.cuidadodemascotas.usermicroservice.apis.repository.UserRepository…
+2025-11-08 03:30:57 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByEmailWithRoles.count
+2025-11-08 03:30:58 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-08 03:30:58 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByRoleIdAndActiveTrue.count
+2025-11-08 03:30:58 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByRoleIdAndActiveTrue.count
+2025-11-08 03:30:58 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByIdAndActiveTrue.count
+2025-11-08 03:30:58 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByEmailAndActiveTrue.count
+2025-11-08 03:30:58 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.existsByEmailAndIdNot'
+2025-11-08 03:30:58 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.existsByEmailAndIdNot
+2025-11-08 03:30:58 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByRoleNameAndSearch.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByRoleNameAndAvailabilityState.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByRoleNameAndActiveTrue.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByRoleNameAndActiveTrue.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.countByRoleName.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByFilters.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.countByActiveTrue.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.existsByEmail'
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.existsByEmail
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByEmailAndActiveTrueWithRoles.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findAllActive.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findAllActive.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.countByRoleId.count
+2025-11-08 03:30:59 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.searchByNameOrLastName.count
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.r.c.s.RepositoryFactorySupport - Finished creation of repository instance for org.example.cuidadodemascotas.usermicroservice.apis.repository.UserRepository.
+2025-11-08 03:31:00 [restartedMain] DEBUG o.e.c.u.jwt.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.r.c.s.RepositoryFactorySupport - Initializing repository instance for org.example.cuidadodemascotas.usermicroservice.apis.repository.RoleRepository…
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Role.findByName'
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Role.findByName
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Role.existsByNameAndIdNot'
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Role.existsByNameAndIdNot
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Role.searchByName.count
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Role.findAllOrdered.count
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Role.existsByName'
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Role.existsByName
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.r.c.s.RepositoryFactorySupport - Finished creation of repository instance for org.example.cuidadodemascotas.usermicroservice.apis.repository.RoleRepository.
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.r.c.s.RepositoryFactorySupport - Initializing repository instance for org.example.cuidadodemascotas.usermicroservice.apis.repository.UserRoleRepository…
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query UserRole.findByRoleIdAndActiveTrue.count
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query UserRole.findByIdAndActiveTrue.count
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query UserRole.findByUserIdAndActiveTrue.count
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query UserRole.findByUserIdAndRoleIdAndActiveTrue.count
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'UserRole.existsByUserIdAndRoleIdAndActiveTrue'
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query UserRole.existsByUserIdAndRoleIdAndActiveTrue
+2025-11-08 03:31:00 [restartedMain] DEBUG o.s.d.r.c.s.RepositoryFactorySupport - Finished creation of repository instance for org.example.cuidadodemascotas.usermicroservice.apis.repository.UserRoleRepository.
+2025-11-08 03:31:01 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-11-08 03:31:01 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-11-08 03:31:02 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-11-08 03:31:02 [restartedMain] INFO  o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration - Eureka HTTP Client uses RestTemplate.
+2025-11-08 03:31:02 [restartedMain] WARN  o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger - Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-11-08 03:31:02 [restartedMain] INFO  o.s.c.n.eureka.InstanceInfoFactory - Setting initial instance status as: STARTING
+2025-11-08 03:31:02 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Initializing Eureka in region us-east-1
+2025-11-08 03:31:02 [restartedMain] INFO  c.n.d.s.r.aws.ConfigClusterResolver - Resolving eureka endpoints via configuration
+2025-11-08 03:31:02 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Disable delta property : false
+2025-11-08 03:31:02 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Single vip registry refresh property : null
+2025-11-08 03:31:02 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Force full registry fetch : false
+2025-11-08 03:31:02 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Application is null : false
+2025-11-08 03:31:02 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Registered Applications size is zero : true
+2025-11-08 03:31:02 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Application version is -1: true
+2025-11-08 03:31:02 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Getting all instance registry info from the eureka server
+2025-11-08 03:31:03 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - The response status is 200
+2025-11-08 03:31:03 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Starting heartbeat executor: renew interval is: 30
+2025-11-08 03:31:03 [restartedMain] INFO  c.n.discovery.InstanceInfoReplicator - InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-11-08 03:31:03 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Discovery Client initialized at timestamp 1762583463592 with initial instances count: 0
+2025-11-08 03:31:03 [restartedMain] INFO  o.s.c.n.e.s.EurekaServiceRegistry - Registering application USER-MICROSERVICE with eureka with status UP
+2025-11-08 03:31:03 [restartedMain] INFO  c.netflix.discovery.DiscoveryClient - Saw local status change event StatusChangeEvent [timestamp=1762583463599, current=UP, previous=STARTING]
+2025-11-08 03:31:03 [DiscoveryClient-InstanceInfoReplicator-%d] INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_USER-MICROSERVICE/user-microservice:8084: registering service...
+2025-11-08 03:31:03 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2025-11-08 03:31:03 [restartedMain] INFO  o.s.c.n.e.s.EurekaAutoServiceRegistration - Updating port to 8084
+2025-11-08 03:31:03 [restartedMain] INFO  o.e.c.u.UserMicroserviceApplication - Started UserMicroserviceApplication in 14.19 seconds (process running for 15.952)
+2025-11-08 03:31:03 [DiscoveryClient-InstanceInfoReplicator-%d] INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_USER-MICROSERVICE/user-microservice:8084 - registration status: 204
+2025-11-08 03:31:33 [DiscoveryClient-CacheRefreshExecutor-%d] INFO  c.netflix.discovery.DiscoveryClient - Disable delta property : false
+2025-11-08 03:31:33 [DiscoveryClient-CacheRefreshExecutor-%d] INFO  c.netflix.discovery.DiscoveryClient - Single vip registry refresh property : null
+2025-11-08 03:31:33 [DiscoveryClient-CacheRefreshExecutor-%d] INFO  c.netflix.discovery.DiscoveryClient - Force full registry fetch : false
+2025-11-08 03:31:33 [DiscoveryClient-CacheRefreshExecutor-%d] INFO  c.netflix.discovery.DiscoveryClient - Application is null : false
+2025-11-08 03:31:33 [DiscoveryClient-CacheRefreshExecutor-%d] INFO  c.netflix.discovery.DiscoveryClient - Registered Applications size is zero : true
+2025-11-08 03:31:33 [DiscoveryClient-CacheRefreshExecutor-%d] INFO  c.netflix.discovery.DiscoveryClient - Application version is -1: false
+2025-11-08 03:31:33 [DiscoveryClient-CacheRefreshExecutor-%d] INFO  c.netflix.discovery.DiscoveryClient - Getting all instance registry info from the eureka server
+2025-11-08 03:31:33 [DiscoveryClient-CacheRefreshExecutor-%d] INFO  c.netflix.discovery.DiscoveryClient - The response status is 200
+2025-11-08 03:32:30 [http-nio-8084-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-08 03:32:30 [http-nio-8084-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-11-08 03:32:30 [http-nio-8084-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 5 ms
+2025-11-08 03:32:30 [http-nio-8084-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id_user,
+        u1_0.active,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.last_name,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone_number,
+        u1_0.profile_photo,
+        u1_0.enum_availability_state,
+        u1_0.updated_at,
+        ur1_0.fk_user,
+        ur1_0.id_user_role,
+        ur1_0.active,
+        ur1_0.created_at,
+        ur1_0.fk_role,
+        r1_0.id_role,
+        r1_0.name,
+        ur1_0.updated_at 
+    from
+        public.users u1_0 
+    left join
+        public.user_roles ur1_0 
+            on u1_0.id_user=ur1_0.fk_user 
+    left join
+        public.roles r1_0 
+            on r1_0.id_role=ur1_0.fk_role 
+    where
+        u1_0.email=? 
+        and u1_0.active=true
+2025-11-08 03:32:31 [http-nio-8084-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id_user,
+        u1_0.active,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.last_name,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone_number,
+        u1_0.profile_photo,
+        u1_0.enum_availability_state,
+        u1_0.updated_at,
+        ur1_0.fk_user,
+        ur1_0.id_user_role,
+        ur1_0.active,
+        ur1_0.created_at,
+        ur1_0.fk_role,
+        r1_0.id_role,
+        r1_0.name,
+        ur1_0.updated_at 
+    from
+        public.users u1_0 
+    left join
+        public.user_roles ur1_0 
+            on u1_0.id_user=ur1_0.fk_user 
+    left join
+        public.roles r1_0 
+            on r1_0.id_role=ur1_0.fk_role 
+    where
+        u1_0.email=? 
+        and u1_0.active=true
+2025-11-08 03:32:32 [http-nio-8084-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id_user,
+        u1_0.active,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.last_name,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone_number,
+        u1_0.profile_photo,
+        u1_0.enum_availability_state,
+        u1_0.updated_at,
+        ur1_0.fk_user,
+        ur1_0.id_user_role,
+        ur1_0.active,
+        ur1_0.created_at,
+        ur1_0.fk_role,
+        r1_0.id_role,
+        r1_0.name,
+        ur1_0.updated_at 
+    from
+        public.users u1_0 
+    left join
+        public.user_roles ur1_0 
+            on u1_0.id_user=ur1_0.fk_user 
+    left join
+        public.roles r1_0 
+            on r1_0.id_role=ur1_0.fk_role 
+    where
+        u1_0.email=? 
+        and u1_0.active=true
+2025-11-08 03:32:32 [http-nio-8084-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id_user,
+        u1_0.active,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.last_name,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone_number,
+        u1_0.profile_photo,
+        u1_0.enum_availability_state,
+        u1_0.updated_at,
+        ur1_0.fk_user,
+        ur1_0.id_user_role,
+        ur1_0.active,
+        ur1_0.created_at,
+        ur1_0.fk_role,
+        r1_0.id_role,
+        r1_0.name,
+        ur1_0.updated_at 
+    from
+        public.users u1_0 
+    left join
+        public.user_roles ur1_0 
+            on u1_0.id_user=ur1_0.fk_user 
+    left join
+        public.roles r1_0 
+            on r1_0.id_role=ur1_0.fk_role 
+    where
+        u1_0.email=? 
+        and u1_0.active=true
+2025-11-08 03:32:47 [http-nio-8084-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id_user,
+        u1_0.active,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.last_name,
+        u1_0.name,
+        u1_0.password,
+        u1_0.phone_number,
+        u1_0.profile_photo,
+        u1_0.enum_availability_state,
+        u1_0.updated_at,
+        ur1_0.fk_user,
+        ur1_0.id_user_role,
+        ur1_0.active,
+        ur1_0.created_at,
+        ur1_0.fk_role,
+        r1_0.id_role,
+        r1_0.name,
+        ur1_0.updated_at 
+    from
+        public.users u1_0 
+    left join
+        public.user_roles ur1_0 
+            on u1_0.id_user=ur1_0.fk_user 
+    left join
+        public.roles r1_0 
+            on r1_0.id_role=ur1_0.fk_role 
+    where
+        u1_0.email=? 
+        and u1_0.active=true
+2025-11-08 03:33:03 [SpringApplicationShutdownHook] INFO  o.s.c.n.e.s.EurekaServiceRegistry - Unregistering application USER-MICROSERVICE with eureka with status DOWN
+2025-11-08 03:33:03 [SpringApplicationShutdownHook] INFO  c.netflix.discovery.DiscoveryClient - Saw local status change event StatusChangeEvent [timestamp=1762583583404, current=DOWN, previous=UP]
+2025-11-08 03:33:03 [DiscoveryClient-InstanceInfoReplicator-%d] INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_USER-MICROSERVICE/user-microservice:8084: registering service...
+2025-11-08 03:33:03 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-11-08 03:33:03 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-11-08 03:33:03 [DiscoveryClient-InstanceInfoReplicator-%d] INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_USER-MICROSERVICE/user-microservice:8084 - registration status: 204
+2025-11-08 03:33:03 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-11-08 03:33:03 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-11-08 03:33:03 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-11-08 03:33:03 [SpringApplicationShutdownHook] INFO  c.netflix.discovery.DiscoveryClient - Shutting down DiscoveryClient ...
+2025-11-08 03:33:06 [SpringApplicationShutdownHook] INFO  c.netflix.discovery.DiscoveryClient - Unregistering ...
+2025-11-08 03:33:06 [DiscoveryClient-%d] WARN  c.n.discovery.TimedSupervisorTask - task supervisor shutting down, can't accept the task
+2025-11-08 03:33:06 [SpringApplicationShutdownHook] INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_USER-MICROSERVICE/user-microservice:8084 - deregister  status: 200
+2025-11-08 03:33:06 [SpringApplicationShutdownHook] INFO  c.netflix.discovery.DiscoveryClient - Completed shut down of DiscoveryClient

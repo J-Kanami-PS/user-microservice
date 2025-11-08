@@ -63,7 +63,7 @@ public class AuthService {
         String token = jwtService.getToken(userDetails);
 
         return AuthResponse.builder()
-                .token("Bearer " + token)
+                .token(token)
                 .build();
     }
 

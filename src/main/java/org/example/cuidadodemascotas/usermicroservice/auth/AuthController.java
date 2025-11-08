@@ -35,7 +35,7 @@ public class AuthController {
     @GetMapping("/validate")
     public ResponseEntity<?> validateToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String tokenHeader) {
         try {
-            // 1️⃣ Limpieza y extracción segura
+            // Limpieza y extracción segura
             if (tokenHeader == null || tokenHeader.isBlank()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(Map.of(
@@ -50,7 +50,7 @@ public class AuthController {
             }
             jwt = jwt.replaceAll("[\\r\\n\\t ]", "");
 
-            System.out.println("🔍 Token recibido en /auth/validate: '" + jwt + "'");
+            System.out.println("Token recibido en /auth/validate: '" + jwt + "'");
             long countDots = jwt.chars().filter(ch -> ch == '.').count();
             if (countDots != 2) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -61,7 +61,7 @@ public class AuthController {
                         ));
             }
 
-            // 2️⃣ Extraer claims
+            // Extraer claims
             Claims claims = jwtService.getAllClaims(jwt);
             String username = claims.getSubject();
             String rolesString = claims.get("roles", String.class);
@@ -69,7 +69,7 @@ public class AuthController {
                     ? Arrays.asList(rolesString.split(","))
                     : List.of();
 
-            // 3️⃣ Respuesta exitosa
+            // Respuesta exitosa
             return ResponseEntity.ok(new UserInfoResponse(username, roles));
 
         } catch (io.jsonwebtoken.ExpiredJwtException e) {
@@ -87,7 +87,7 @@ public class AuthController {
                             "timestamp", new Date().toString()
                     ));
         } catch (Exception e) {
-            System.err.println("❌ Error al validar token: " + e.getMessage());
+            System.err.println("Error al validar token: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of(
                             "message", "Error en la autenticación",

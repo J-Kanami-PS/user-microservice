@@ -41,7 +41,6 @@ public class JwtService {
 
         // Convertir las autoridades (roles) y prefijarlas con "ROLE_"
         String roles = user.getAuthorities().stream()
-                // ¡CORRECCIÓN #1: Añadir .toUpperCase()!
                 .map(authority -> "ROLE_" + authority.getAuthority().toUpperCase())
                 .collect(Collectors.joining(","));
 
@@ -61,7 +60,6 @@ public class JwtService {
 
     // Obtener la clave para firmar el token
     private Key getKey() {
-        // ¡CORRECCIÓN #2: Usar UTF_8 en lugar de Base64!
         byte[] keyBytes = SECRET_KEY.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
