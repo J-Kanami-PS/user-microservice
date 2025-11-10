@@ -10,6 +10,7 @@ import org.example.cuidadodemascotas.usermicroservice.exception.NotFoundExceptio
 import org.example.cuidadodemascotas.usermicroservice.utils.UserMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -173,5 +174,22 @@ public class UserService {
         if (dto.getPhoneNumber() == null || dto.getPhoneNumber().isBlank()) {
             throw new IllegalArgumentException("El teléfono es requerido");
         }
+    }
+
+    /**
+     * Buscar usuarios filtrados por email (para usuarios no-admin)
+     */
+    public Page<UserResponseDTO> findByEmailFiltered(String email, int page, int size) {
+        log.debug("Finding user by email (filtered): {}", email);
+        int pageSize = size > 0 ? size : defaultPageSize;
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        // Buscar solo el usuario con ese email
+        User user = userRepository.findByEmailAndActiveTrue(email)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con email: " + email));
+
+        // Crear una página con un solo resultado
+        List<UserResponseDTO> userList = List.of(userMapper.toDto(user));
+        return new PageImpl<>(userList, pageable, 1);
     }
 }

@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-11-08T03:29:16.086620800-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-11-09T21:17:03.821965500-03:00[America/Asuncion]")
 @Validated
 @Tag(name = "Role", description = "the Role API")
 public interface RoleApi {
