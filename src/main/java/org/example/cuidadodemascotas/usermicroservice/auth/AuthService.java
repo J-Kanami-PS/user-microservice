@@ -19,15 +19,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
 
-    @Autowired
-    private final WebClient.Builder webClientBuilder;
     @Autowired
     private final JwtService jwtService;
     @Autowired
