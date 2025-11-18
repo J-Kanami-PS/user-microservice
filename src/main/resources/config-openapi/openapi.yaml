@@ -1,0 +1,709 @@
+openapi: 3.0.3
+info:
+  title: User Microservice API
+  description: Microservicio optimizado para gestión de usuarios y roles múltiples
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8084
+    description: User Microservice
+
+paths:
+  # ==================== ROLES ====================
+  /roles:
+    get:
+      tags: [Role]
+      summary: Obtener todos los roles
+      operationId: getRoles
+      responses:
+        '200':
+          description: Roles obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleResponseDTO'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [Role]
+      summary: Crear un nuevo rol
+      operationId: createRole
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleRequestDTO'
+      responses:
+        '201':
+          description: Rol creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponseDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /roles/{id}:
+    get:
+      tags: [Role]
+      summary: Obtener rol por ID
+      operationId: getRoleById
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Rol obtenido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponseDTO'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [Role]
+      summary: Actualizar rol
+      operationId: updateRole
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleRequestDTO'
+      responses:
+        '200':
+          description: Rol actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponseDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [Role]
+      summary: Eliminar rol
+      operationId: deleteRole
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: Rol eliminado
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /roles/search/{name}:
+    get:
+      tags: [Role]
+      summary: Buscar roles por nombre
+      operationId: searchRoles
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Roles encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleResponseDTO'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  # ==================== USERS ====================
+  /users:
+    get:
+      tags: [User]
+      summary: Obtener usuarios con filtros
+      operationId: getUsers
+      parameters:
+        - name: role
+          in: query
+          required: false
+          description: Filtrar por nombre de rol (CARER, OWNER, ADMIN)
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          description: Buscar por nombre, apellido o email
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+      responses:
+        '200':
+          description: Usuarios obtenidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPageResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [User]
+      summary: Crear un nuevo usuario
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestDTO'
+      responses:
+        '201':
+          description: Usuario creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{id}:
+    get:
+      tags: [User]
+      summary: Obtener usuario por ID
+      operationId: getUserById
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Usuario obtenido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDTO'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [User]
+      summary: Actualizar usuario
+      operationId: updateUser
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestDTO'
+      responses:
+        '200':
+          description: Usuario actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [User]
+      summary: Eliminar usuario (soft delete)
+      operationId: deleteUser
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: Usuario eliminado
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/email/{email}:
+    get:
+      tags: [User]
+      summary: Obtener usuario por email
+      operationId: getUserByEmail
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: Usuario obtenido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDTO'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  # ==================== CONSULTAS ESPECÍFICAS DE ROLES ====================
+  /users/{userId}/is-carer:
+    get:
+      tags: [User]
+      summary: Verificar si usuario es cuidador
+      operationId: isCarer
+      parameters:
+        - $ref: '#/components/parameters/UserIdPath'
+      responses:
+        '200':
+          description: Verificación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoleCheckResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{userId}/is-owner:
+    get:
+      tags: [User]
+      summary: Verificar si usuario es dueño
+      operationId: isOwner
+      parameters:
+        - $ref: '#/components/parameters/UserIdPath'
+      responses:
+        '200':
+          description: Verificación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoleCheckResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{userId}/has-role/{roleName}:
+    get:
+      tags: [User]
+      summary: Verificar si usuario tiene un rol específico
+      operationId: hasRole
+      parameters:
+        - $ref: '#/components/parameters/UserIdPath'
+        - name: roleName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Verificación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoleCheckResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{userId}/roles:
+    get:
+      tags: [User]
+      summary: Obtener todos los roles de un usuario
+      operationId: getUserRoles
+      parameters:
+        - $ref: '#/components/parameters/UserIdPath'
+      responses:
+        '200':
+          description: Roles del usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleResponseDTO'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [User]
+      summary: Asignar un rol al usuario
+      operationId: assignRoleToUser
+      parameters:
+        - $ref: '#/components/parameters/UserIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignRoleRequestDTO'
+      responses:
+        '201':
+          description: Rol asignado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoleResponseDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{userId}/roles/{roleId}:
+    delete:
+      tags: [User]
+      summary: Remover un rol del usuario
+      operationId: removeRoleFromUser
+      parameters:
+        - $ref: '#/components/parameters/UserIdPath'
+        - $ref: '#/components/parameters/RoleIdPath'
+      responses:
+        '204':
+          description: Rol removido exitosamente
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  # ==================== LISTADOS ESPECÍFICOS ====================
+  /users/carers/available:
+    get:
+      tags: [User]
+      summary: Obtener cuidadores disponibles
+      operationId: getAvailableCarers
+      responses:
+        '200':
+          description: Cuidadores disponibles obtenidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponseDTO'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/count:
+    get:
+      tags: [User]
+      summary: Contar todos los usuarios activos
+      operationId: countUsers
+      responses:
+        '200':
+          description: Conteo de usuarios
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  # ==================== USER-ROLES (para administración) ====================
+  /user-roles:
+    get:
+      tags: [UserRole]
+      summary: Obtener todas las relaciones usuario-rol
+      operationId: getAllUserRoles
+      responses:
+        '200':
+          description: Relaciones obtenidas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRoleResponseDTO'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /user-roles/{id}:
+    delete:
+      tags: [UserRole]
+      summary: Eliminar relación usuario-rol por ID
+      operationId: deleteUserRole
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: Relación eliminada exitosamente
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  # ==================== PARÁMETROS REUTILIZABLES ====================
+  parameters:
+    IdPath:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: ID del recurso
+
+    UserIdPath:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: ID del usuario
+
+    RoleIdPath:
+      name: roleId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+      description: ID del rol
+
+    Page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+      description: Número de página (0-based)
+
+    Size:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+        maximum: 100
+      description: Tamaño de la página
+
+  # ==================== RESPUESTAS REUTILIZABLES ====================
+  responses:
+    BadRequest:
+      description: Solicitud inválida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+
+    InternalServerError:
+      description: Error interno del servidor
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+
+  # ==================== ESQUEMAS ====================
+  schemas:
+    # Error Schema
+    ApiError:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+
+    # DTOs de Role
+    RoleRequestDTO:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          maxLength: 10
+
+    RoleResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+
+    # DTOs de User - ACTUALIZADOS PARA ROLES MÚLTIPLES
+    UserRequestDTO:
+      type: object
+      required: [name, lastName, email, password, phoneNumber, availabilityState]
+      properties:
+        name:
+          type: string
+          maxLength: 60
+        lastName:
+          type: string
+          maxLength: 60
+        email:
+          type: string
+          format: email
+          maxLength: 100
+        password:
+          type: string
+          writeOnly: true
+        phoneNumber:
+          type: string
+          pattern: '^[0-9]{10,15}$'
+        profilePhoto:
+          type: string
+        availabilityState:
+          type: string
+          enum: [AVAILABLE, NOT_AVAILABLE, BUSY]
+          default: AVAILABLE
+
+    UserResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        profilePhoto:
+          type: string
+        availabilityState:
+          type: string
+          enum: [AVAILABLE, NOT_AVAILABLE, BUSY]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        active:
+          type: boolean
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponseDTO'
+
+    UserPageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponseDTO'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        size:
+          type: integer
+        number:
+          type: integer
+
+    # ==================== DTOs PARA GESTIÓN DE ROLES ====================
+    AssignRoleRequestDTO:
+      type: object
+      required: [roleId]
+      properties:
+        roleId:
+          type: integer
+          format: int64
+          description: ID del rol a asignar
+
+    UserRoleRequestDTO:
+      type: object
+      required: [userId, roleId]
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: ID del usuario
+        roleId:
+          type: integer
+          format: int64
+          description: ID del rol a asignar
+
+    UserRoleResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID de la relación usuario-rol
+        userId:
+          type: integer
+          format: int64
+          description: ID del usuario
+        roleId:
+          type: integer
+          format: int64
+          description: ID del rol
+        roleName:
+          type: string
+          description: Nombre del rol asignado
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        active:
+          type: boolean
+
+    UserRoleCheckResponse:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        hasRole:
+          type: boolean
+          description: Indica si el usuario tiene el rol especificado
+        roleName:
+          type: string
+          description: Nombre del rol consultado

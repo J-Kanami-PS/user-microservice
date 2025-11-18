@@ -1,0 +1,94 @@
+package org.example.cuidadodemascotas.usermicroservice.apis.dto;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * RoleRequestDTO
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-11-13T13:29:55.623539600-03:00[America/Asuncion]")
+public class RoleRequestDTO {
+
+  private String name;
+
+  public RoleRequestDTO() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public RoleRequestDTO(String name) {
+    this.name = name;
+  }
+
+  public RoleRequestDTO name(String name) {
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * Get name
+   * @return name
+  */
+  @NotNull @Size(max = 10) 
+  @Schema(name = "name", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("name")
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    RoleRequestDTO roleRequestDTO = (RoleRequestDTO) o;
+    return Objects.equals(this.name, roleRequestDTO.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class RoleRequestDTO {\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+
