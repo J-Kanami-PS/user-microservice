@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * UserRoleCheckResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-11-15T17:38:32.308926100-03:00[America/Asuncion]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-11-20T14:43:02.908640100-03:00[America/Asuncion]")
 public class UserRoleCheckResponse {
 
   private Long userId;

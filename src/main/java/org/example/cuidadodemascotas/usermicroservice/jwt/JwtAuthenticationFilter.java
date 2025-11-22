@@ -35,6 +35,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    // ✅ AÑADIR ESTE MÉTODO para saltar rutas públicas
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return isPublicPath(path);
+    }
+
+    // ✅ AÑADIR ESTE MÉTODO para identificar rutas públicas
+    private boolean isPublicPath(String path) {
+        return path.startsWith("/auth/") ||
+                path.contains("/users/carers/available") ||
+                (path.contains("/users/") && path.contains("/is-carer")) ||
+                (path.contains("/users/") && path.contains("/is-owner")) ||
+                (path.contains("/users/") && path.contains("/has-role/")) ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs") ||
+                path.startsWith("/api-docs") ||
+                path.startsWith("/actuator");
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -58,7 +78,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 3. Validate token.
                 if (jwtService.isTokenValid(token, userDetails)) {
                     // 4. Get roles from token and create authorities.
-                    // Note: This relies on the JwtService/Token generation adding roles as a comma-separated string.
                     String roles = (String) jwtService.getClaim(token, claims -> claims.get("roles"));
 
                     Collection<SimpleGrantedAuthority> authorities = Arrays.stream(roles.split(","))
@@ -76,25 +95,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (ExpiredJwtException | MalformedJwtException ex) {
-            // Si el token es inválido (expirado, malformado), limpiar el contexto.
-            // Esto permite que el flujo falle la autenticación/autorización más adelante
-            // y que el CustomAuthenticationEntryPoint (401) responda.
             SecurityContextHolder.clearContext();
             logger.warn("JWT validation failed (Expired or Malformed): " + ex.getClass().getSimpleName());
         } catch (Exception ex) {
-            // Captura cualquier otro error (ej. error de DB al cargar el usuario).
             SecurityContextHolder.clearContext();
             logger.error("Error during JWT processing: " + ex.getMessage(), ex);
         }
 
-        // Continue the filter chain.
         filterChain.doFilter(request, response);
     }
 
-
-    /**
-     * Extracts the JWT token (without the 'Bearer ' prefix) from the Authorization header.
-     */
     private String getTokenFromRequest(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
@@ -102,11 +112,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return null;
         }
 
-        // Remove prefix and clean token
         String token = authHeader.substring(7).trim();
         token = token.replaceAll("[\\r\\n\\t ]", "");
-
         return token;
     }
-
 }

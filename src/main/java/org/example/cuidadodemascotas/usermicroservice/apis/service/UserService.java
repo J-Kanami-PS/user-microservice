@@ -1,6 +1,8 @@
 package org.example.cuidadodemascotas.usermicroservice.apis.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.cuidadodemascota.commons.dto.ServiceResponseDTO;
+import org.example.cuidadodemascota.commons.entities.enums.AvailabilityStateEnum;
 import org.example.cuidadodemascota.commons.entities.user.User;
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserRequestDTO;
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.UserResponseDTO;
@@ -87,13 +89,19 @@ public class UserService {
         return userRoleService.userHasRole(userId, roleName);
     }
 
-    public List<UserResponseDTO> findAvailableCarers() {
+   public List<UserResponseDTO> findAvailableCarers() {
         log.debug("Finding available carers");
-        List<User> carers = userRepository.findByRoleNameAndAvailabilityState("CARER", "AVAILABLE");
+        List<User> carers = userRepository.findByRoleNameAndAvailabilityState(
+                "CARER",
+                AvailabilityStateEnum.AVAILABLE
+        );
+        //List<User> carers = userRepository.findByRoleNameAndAvailabilityState("CARER", "AVAILABLE");
         return carers.stream()
                 .map(userMapper::toDto)
                 .toList();
     }
+
+
 
     public Page<UserResponseDTO> findByRoleName(String roleName, int page, int size) {
         log.debug("Finding users by roleName: {}", roleName);
