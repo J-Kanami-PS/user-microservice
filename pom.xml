@@ -193,6 +193,7 @@
     </dependencies>
 
     <build>
+        <finalName>users</finalName>
         <plugins>
             <!-- Compiler -->
             <plugin>
