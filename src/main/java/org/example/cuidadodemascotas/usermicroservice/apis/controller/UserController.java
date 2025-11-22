@@ -1,11 +1,16 @@
 package org.example.cuidadodemascotas.usermicroservice.apis.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.cuidadodemascota.commons.dto.ReservationResponseDTO;
 import org.example.cuidadodemascotas.usermicroservice.apis.dto.*;
 import org.example.cuidadodemascotas.usermicroservice.apis.service.UserService;
 import org.example.cuidadodemascotas.usermicroservice.apis.service.UserRoleService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+
 import java.util.List;
 
 @Slf4j
@@ -51,7 +57,11 @@ public class UserController {
 
         if (isAdmin) {
             // ADMIN puede ver todos
-            result = userService.findByFilters(role, search, page, size);
+            result = role == null && search == null ?
+                    userService.findAll(page, size)
+                    :
+                    userService.findByFilters(role, search, page, size);
+
             log.info("Admin '{}' viewing all users", userEmail);
         } else {
             // OWNER/CARER solo ve su propio perfil
@@ -60,6 +70,32 @@ public class UserController {
         }
 
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Page<UserResponseDTO>> findAll(
+            @Parameter(description = "Número de página (0-indexed)")
+            @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Tamaño de página")
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Campo de ordenamiento")
+            @RequestParam(defaultValue = "id") String sortBy,
+            @Parameter(description = "Dirección de ordenamiento (ASC/DESC)")
+            @RequestParam(defaultValue = "DESC") String sortDir) {
+
+        log.info("--------------------------------------------------------------------------");
+        log.info("GET /users - Listar todas (page={}, size={}, sortBy={}, sortDir={})",
+                page, size, sortBy, sortDir);
+        log.info("--------------------------------------------------------------------------");
+
+        Sort.Direction direction = sortDir.equalsIgnoreCase("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+
+        Page<UserResponseDTO> response = userService.findAllUsers(pageable);
+
+        log.info("Se obtuvieron {} usuarios de {} totales",
+                response.getNumberOfElements(), response.getTotalElements());
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -122,7 +158,7 @@ public class UserController {
      * - Usuario autenticado: solo puede ver sus propios roles
      */
     @GetMapping("/{userId}/roles")
-   // @PreAuthorize("hasRole('ADMIN') or @userSecurityService.isOwner(#userId)")
+    // @PreAuthorize("hasRole('ADMIN') or @userSecurityService.isOwner(#userId)")
     public ResponseEntity<List<RoleResponseDTO>> getUserRoles(@PathVariable Long userId) {
         log.info("GET /users/{}/roles", userId);
         List<UserRoleResponseDTO> userRoles = userRoleService.getUserRoles(userId);

@@ -1,6 +1,7 @@
 package org.example.cuidadodemascotas.usermicroservice.apis.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.cuidadodemascota.commons.dto.ReservationResponseDTO;
 import org.example.cuidadodemascota.commons.dto.ServiceResponseDTO;
 import org.example.cuidadodemascota.commons.entities.enums.AvailabilityStateEnum;
 import org.example.cuidadodemascota.commons.entities.user.User;
@@ -199,5 +200,33 @@ public class UserService {
         // Crear una página con un solo resultado
         List<UserResponseDTO> userList = List.of(userMapper.toDto(user));
         return new PageImpl<>(userList, pageable, 1);
+    }
+
+    /**
+     * Listar todos los usuarios (solo para ADMIN)
+     */
+    @Transactional(readOnly = true)
+    public Page<UserResponseDTO> findAll(int page, int size) {
+        int pageSize = size > 0 ? size : defaultPageSize;
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Page<User> result = userRepository.findAllActive(pageable);
+        return result.map(userMapper::toDto);
+    }
+
+    /**
+     * Listar todos los usuarios (sin paginación, solo para ADMIN)
+     */
+    @Transactional(readOnly = true)
+    public Page<UserResponseDTO> findAllUsers(Pageable pageable) {
+        log.info("Obteniendo todos los Usuarios - Página: {}, Tamaño: {}",
+                pageable.getPageNumber(), pageable.getPageSize());
+
+        Page<User> page = userRepository.findAllActive(pageable);
+
+        log.info("Se encontraron {} Usuarios en la página {}",
+                page.getNumberOfElements(), page.getNumber());
+
+        return page.map(userMapper::toDto);
     }
 }
