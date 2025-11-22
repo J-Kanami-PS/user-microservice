@@ -29,38 +29,25 @@ public class SecurityConfig {
     @Autowired
     private AuthenticationProvider authProvider;
 
-    @Autowired
-    private CustomAccessDeniedHandler accessDeniedHandler;
-
-    @Autowired
-    private CustomAuthenticationEntryPoint authenticationEntryPoint;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest -> authRequest
-                        // ========== ENDPOINTS PÚBLICOS ==========
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()           // ← Para AuthController
                         .requestMatchers("/users/carers/available").permitAll()
                         .requestMatchers("/users/*/is-carer").permitAll()
                         .requestMatchers("/users/*/is-owner").permitAll()
                         .requestMatchers("/users/*/has-role/*").permitAll()
-
-                        // ========== SWAGGER / ACTUATOR ==========
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
-
-                        // ========== TODO LO DEMAS REQUIERE AUTENTICACION ==========
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated()  // ← El resto requiere autenticación
                 )
-                .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(authenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler))
                 .sessionManagement(sessionManager -> sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider)
+                // ⚠️ EL JwtAuthenticationFilter debe ir SOLO después de las rutas públicas
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

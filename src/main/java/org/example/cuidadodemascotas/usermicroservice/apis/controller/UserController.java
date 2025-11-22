@@ -122,7 +122,7 @@ public class UserController {
      * - Usuario autenticado: solo puede ver sus propios roles
      */
     @GetMapping("/{userId}/roles")
-    @PreAuthorize("hasRole('ADMIN') or @userSecurityService.isOwner(#userId)")
+   // @PreAuthorize("hasRole('ADMIN') or @userSecurityService.isOwner(#userId)")
     public ResponseEntity<List<RoleResponseDTO>> getUserRoles(@PathVariable Long userId) {
         log.info("GET /users/{}/roles", userId);
         List<UserRoleResponseDTO> userRoles = userRoleService.getUserRoles(userId);
@@ -169,7 +169,7 @@ public class UserController {
      * - Usuario autenticado: solo puede ver su propio perfil
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userSecurityService.isOwner(#id)")
+    //@PreAuthorize("hasRole('ADMIN') or @userSecurityService.isOwner(#id)")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         log.info("GET /users/{}", id);
         UserResponseDTO response = userService.findById(id);

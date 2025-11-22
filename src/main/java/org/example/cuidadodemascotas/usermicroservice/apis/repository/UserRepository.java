@@ -1,6 +1,6 @@
 package org.example.cuidadodemascotas.usermicroservice.apis.repository;
 
-import org.example.cuidadodemascota.commons.entities.user.Role;
+import org.example.cuidadodemascota.commons.entities.enums.AvailabilityStateEnum;
 import org.example.cuidadodemascota.commons.entities.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +15,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // ==================== BÁSICOS ====================
-
     @Query("SELECT u FROM User u WHERE u.id = :id AND u.active = true")
     Optional<User> findByIdAndActiveTrue(@Param("id") Long id);
 
@@ -26,76 +24,65 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.active = true")
     List<User> findAllActive();
 
-    // ==================== BÚSQUEDA POR ROL (ID) ====================
-
     @Query("SELECT DISTINCT u FROM User u " +
             "JOIN u.userRoles ur " +
-            "WHERE ur.role.id = :roleId " +
-            "AND ur.active = true " +
-            "AND u.active = true " +
+            "WHERE ur.role.id = :roleId AND u.active = true AND ur.active = true " +
             "ORDER BY u.id DESC")
     Page<User> findByRoleIdAndActiveTrue(@Param("roleId") Long roleId, Pageable pageable);
 
     @Query("SELECT DISTINCT u FROM User u " +
             "JOIN u.userRoles ur " +
-            "WHERE ur.role.id = :roleId " +
-            "AND ur.active = true " +
-            "AND u.active = true")
+            "WHERE ur.role.id = :roleId AND u.active = true AND ur.active = true")
     List<User> findByRoleIdAndActiveTrue(@Param("roleId") Long roleId);
-
-    // ==================== BÚSQUEDA POR ROL (NOMBRE) ====================
 
     @Query("SELECT DISTINCT u FROM User u " +
             "JOIN u.userRoles ur " +
-            "WHERE UPPER(ur.role.name) = UPPER(:roleName) " +
-            "AND ur.active = true " +
-            "AND u.active = true " +
+            "JOIN ur.role r " +
+            "WHERE r.name = :roleName AND u.active = true AND ur.active = true " +
             "ORDER BY u.id DESC")
     Page<User> findByRoleNameAndActiveTrue(@Param("roleName") String roleName, Pageable pageable);
 
     @Query("SELECT DISTINCT u FROM User u " +
             "JOIN u.userRoles ur " +
-            "WHERE UPPER(ur.role.name) = UPPER(:roleName) " +
-            "AND ur.active = true " +
-            "AND u.active = true")
+            "JOIN ur.role r " +
+            "WHERE r.name = :roleName AND u.active = true AND ur.active = true")
     List<User> findByRoleNameAndActiveTrue(@Param("roleName") String roleName);
 
-    // ==================== BÚSQUEDA POR EMAIL ====================
-
+    /**
+     * Buscar usuario por email
+     */
     @Query("SELECT u FROM User u WHERE u.email = :email AND u.active = true")
     Optional<User> findByEmailAndActiveTrue(@Param("email") String email);
 
+    /**
+     * Verificar si existe un email
+     */
     boolean existsByEmail(String email);
 
     boolean existsByEmailAndIdNot(String email, Long id);
 
-    // ==================== BÚSQUEDA POR NOMBRE/APELLIDO ====================
-
-    @Query("SELECT u FROM User u " +
-            "WHERE u.active = true " +
-            "AND (LOWER(u.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-            "     LOWER(u.lastName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
+    /**
+     * Buscar usuarios por nombre o apellido
+     */
+    @Query("SELECT u FROM User u WHERE " +
+            "(LOWER(CAST(u.name AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            "LOWER(CAST(u.lastName AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) AND " +
+            "u.active = true " +
             "ORDER BY u.id DESC")
     Page<User> searchByNameOrLastName(@Param("searchTerm") String searchTerm, Pageable pageable);
 
-    // ==================== BÚSQUEDA CON FILTROS (CORREGIDO) ====================
-
     /**
-     * Query optimizado que maneja correctamente roleId y searchTerm opcionales
-     * Si roleId es NULL, busca en TODOS los usuarios
+     * Búsqueda con filtros múltiples (incluyendo roles)
      */
     @Query("SELECT DISTINCT u FROM User u " +
-            "WHERE u.active = true " +
-            "AND (:roleId IS NULL OR EXISTS (" +
-            "    SELECT 1 FROM UserRole ur " +
-            "    WHERE ur.user = u " +
-            "    AND ur.role.id = :roleId " +
-            "    AND ur.active = true" +
-            ")) " +
-            "AND (:searchTerm IS NULL OR :searchTerm = '' OR " +
-            "    LOWER(u.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-            "    LOWER(u.lastName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-            "    LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
+            "LEFT JOIN u.userRoles ur " +
+            "WHERE (:roleId IS NULL OR ur.role.id = :roleId) AND " +
+            "(:searchTerm IS NULL OR " +
+            " LOWER(CAST(u.name AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            " LOWER(CAST(u.lastName AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            " LOWER(CAST(u.email AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) AND " +
+            "u.active = true AND " +
+            "(ur IS NULL OR ur.active = true) " +
             "ORDER BY u.id DESC")
     Page<User> findByFilters(
             @Param("roleId") Long roleId,
@@ -104,21 +91,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
     );
 
     /**
-     * Query optimizado con nombre de rol en lugar de ID
-     * Si roleName es NULL o vacío, busca en TODOS los usuarios
+     * Búsqueda con nombre de rol en lugar de ID
      */
     @Query("SELECT DISTINCT u FROM User u " +
-            "WHERE u.active = true " +
-            "AND (:roleName IS NULL OR :roleName = '' OR EXISTS (" +
-            "    SELECT 1 FROM UserRole ur " +
-            "    WHERE ur.user = u " +
-            "    AND UPPER(ur.role.name) = UPPER(:roleName) " +
-            "    AND ur.active = true" +
-            ")) " +
-            "AND (:searchTerm IS NULL OR :searchTerm = '' OR " +
-            "    LOWER(u.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-            "    LOWER(u.lastName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-            "    LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
+            "JOIN u.userRoles ur " +
+            "JOIN ur.role r " +
+            "WHERE (:roleName IS NULL OR r.name = :roleName) AND " +
+            "(:searchTerm IS NULL OR " +
+            " LOWER(CAST(u.name AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            " LOWER(CAST(u.lastName AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            " LOWER(CAST(u.email AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) AND " +
+            "u.active = true AND ur.active = true " +
             "ORDER BY u.id DESC")
     Page<User> findByRoleNameAndSearch(
             @Param("roleName") String roleName,
@@ -126,68 +109,44 @@ public interface UserRepository extends JpaRepository<User, Long> {
             Pageable pageable
     );
 
-    // ==================== CUIDADORES DISPONIBLES ====================
-
-    @Query("SELECT DISTINCT u FROM User u " +
-            "JOIN u.userRoles ur " +
-            "WHERE UPPER(ur.role.name) = 'CARER' " +
-            "AND ur.active = true " +
-            "AND u.active = true " +
-            "AND u.state = org.example.cuidadodemascota.commons.entities.enums.AvailabilityStateEnum.AVAILABLE")
-    List<User> findAvailableCarers();
-
     /**
-     * MÉTODO ALTERNATIVO: Buscar por nombre de rol y estado
+     * Contar usuarios activos por role
      */
-    @Query("SELECT DISTINCT u FROM User u " +
-            "JOIN u.userRoles ur " +
-            "WHERE UPPER(ur.role.name) = UPPER(:roleName) " +
-            "AND ur.active = true " +
-            "AND u.active = true " +
-            "AND CAST(u.state AS string) = :availabilityState")
-    List<User> findByRoleNameAndAvailabilityState(
-            @Param("roleName") String roleName,
-            @Param("availabilityState") String availabilityState
-    );
-
-    // ==================== OBTENER ROLES DE USUARIO ====================
-
-    @Query("SELECT ur.role FROM UserRole ur " +
-            "WHERE ur.user.id = :userId " +
-            "AND ur.active = true")
-    List<Role> findRolesByUserId(@Param("userId") Long userId);
-
-    // ==================== VERIFICAR SI TIENE ROL ====================
-
-    @Query("SELECT CASE WHEN COUNT(ur) > 0 THEN true ELSE false END " +
-            "FROM UserRole ur " +
-            "WHERE ur.user.id = :userId " +
-            "AND UPPER(ur.role.name) = UPPER(:roleName) " +
-            "AND ur.active = true")
-    boolean hasRole(@Param("userId") Long userId, @Param("roleName") String roleName);
-
-    // ==================== CONTADORES ====================
-
     @Query("SELECT COUNT(DISTINCT u) FROM User u " +
             "JOIN u.userRoles ur " +
-            "WHERE ur.role.id = :roleId " +
-            "AND ur.active = true " +
-            "AND u.active = true")
+            "WHERE ur.role.id = :roleId AND u.active = true AND ur.active = true")
     long countByRoleId(@Param("roleId") Long roleId);
 
+    /**
+     * Contar usuarios por nombre de rol
+     */
     @Query("SELECT COUNT(DISTINCT u) FROM User u " +
             "JOIN u.userRoles ur " +
-            "WHERE UPPER(ur.role.name) = UPPER(:roleName) " +
-            "AND ur.active = true " +
-            "AND u.active = true")
+            "JOIN ur.role r " +
+            "WHERE r.name = :roleName AND u.active = true AND ur.active = true")
     long countByRoleName(@Param("roleName") String roleName);
 
     @Query("SELECT COUNT(u) FROM User u WHERE u.active = true")
     long countByActiveTrue();
 
+    /**
+     * Buscar usuarios con un estado de disponibilidad específico
+     */
+    @Query("SELECT u FROM User u " +
+            "JOIN u.userRoles ur " +
+            "JOIN ur.role r " +
+            "WHERE r.name = :roleName AND u.state = :availabilityState AND u.active = true AND ur.active = true")
+    List<User> findByRoleNameAndAvailabilityState(
+            @Param("roleName") String roleName,
+            @Param("availabilityState") AvailabilityStateEnum availabilityState
+    );
+
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.userRoles WHERE u.email = :email AND u.active = true")
     Optional<User> findByEmailAndActiveTrueWithRoles(@Param("email") String email);
-
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.userRoles ur LEFT JOIN FETCH ur.role WHERE u.email = :email AND u.active = true")
     Optional<User> findByEmailWithRoles(@Param("email") String email);
+
+
+
+
 }
